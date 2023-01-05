@@ -10,7 +10,6 @@ public:
     ~Shape3D();
 
 private:
-
 };
 
 #endif
