@@ -9,8 +9,10 @@
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
+      "internalConsoleOptions": "openOnSessionStart",
       "environment": [],
-      "console": "externalTerminal"
+      "console": "integratedTerminal",
+      "preLaunchTask": "Build"
     },
     {
       "name": "(MacOS) Launch",
