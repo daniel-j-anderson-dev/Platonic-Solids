@@ -15,7 +15,7 @@
       },
       "windows": {
         "command": "powershell",
-        "args": ["-c", "mingw32-make"]
+        "args": ["-c", "make windows"]
       },
       "linux": {
         "command": "bash",
@@ -23,7 +23,7 @@
       },
       "osx": {
         "command": "bash",
-        "args": ["-c", "make"]
+        "args": ["-c", "make macos"]
       }
     },
     {
