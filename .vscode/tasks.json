@@ -52,7 +52,7 @@
       },
       "windows": {
         "command": "powershell",
-        "args": ["-c", "'mingw32-make clean'"]
+        "args": ["-c", "'make clean'"]
       },
       "linux": {
         "command": "bash",
