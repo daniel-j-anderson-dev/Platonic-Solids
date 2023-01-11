@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 
 		// Move each point
-		p1.inc();
-		p2.inc();
+		// p1.increment();
+		p2.increment();
 
 		// Wait about 1/60 of a second
 		SDL_Delay(17); 

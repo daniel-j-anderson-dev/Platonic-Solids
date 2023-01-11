@@ -16,10 +16,10 @@ public:
     void setX(int x);
     void setY(int y);
 
-    void incX();
-    void incY();
-    void inc();
-    void inc(int i);
+    void incrementX();
+    void incrementY();
+    void increment();
+    void increment(int i);
 
 private:
 

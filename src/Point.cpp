@@ -43,23 +43,23 @@ void Point::setY(int y)
     this->y = y;
 }
 
-void Point::incX()
+void Point::incrementX()
 {
     this->x++;
 }
 
-void Point::incY()
+void Point::incrementY()
 {
     this->y++;
 }
 
-void Point::inc()
+void Point::increment()
 {
     this->x++;
     this->y++;
 }
 
-void Point::inc(int i)
+void Point::increment(int i)
 {
     this->x += i;
     this->y += i;
