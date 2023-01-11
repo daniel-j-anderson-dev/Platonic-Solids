@@ -19,17 +19,27 @@ int main(int argc, char *argv[])
 	SDL_Event event;
 	while (true)
 	{
-		// Clear window of previous frame
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderClear(renderer);
-
 		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
 		{
 			break;
 		}
 
+		// Clear window of previous frame
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderClear(renderer);
+
 		// Draw the line
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderDrawLine(renderer, (int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
+		SDL_RenderPresent(renderer);
+
+		p1.setX(p1.getX() + 1);
+		p1.setY(p1.getY() + 1);
+
+		p2.setX(p2.getX() + 1);
+		p2.setY(p2.getY() + 1);
+		
+		SDL_Delay(100);
 	}
 
 	// Clean up

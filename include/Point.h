@@ -19,6 +19,7 @@ public:
 
 private:
 
+    // Change these to ints
     double x;
     double y;
 
