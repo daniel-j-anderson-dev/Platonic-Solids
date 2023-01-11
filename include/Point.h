@@ -7,21 +7,24 @@ class Point
 {
 public:
     Point();
-    Point(double x, double y);
+    Point(int x, int y);
     Point(Point* point);
     ~Point();
     
-    double getX();
-    double getY();
-    void   setX(double x);
-    void   setY(double y);
+    int  getX();
+    int  getY();
+    void setX(int x);
+    void setY(int y);
 
+    void incX();
+    void incY();
+    void inc();
+    void inc(int i);
 
 private:
 
-    // Change these to ints
-    double x;
-    double y;
+    int x;
+    int y;
 
 };
 

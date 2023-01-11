@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 	SDL_Event event;
 	while (true)
 	{
+		// TODO: Handle quit event
 		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
 		{
 			break;
@@ -30,16 +31,15 @@ int main(int argc, char *argv[])
 
 		// Draw the line
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderDrawLine(renderer, (int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
+		SDL_RenderDrawLine(renderer, p1.getX(), p1.getY(), p2.getX(), p2.getY());
 		SDL_RenderPresent(renderer);
 
-		p1.setX(p1.getX() + 1);
-		p1.setY(p1.getY() + 1);
+		// Move each point
+		p1.inc();
+		p2.inc();
 
-		p2.setX(p2.getX() + 1);
-		p2.setY(p2.getY() + 1);
-
-		SDL_Delay(17); // about 1/60 of a second
+		// Wait about 1/60 of a second
+		SDL_Delay(17); 
 	}
 
 	// Clean up

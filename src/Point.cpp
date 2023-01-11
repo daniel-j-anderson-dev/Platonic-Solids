@@ -6,7 +6,7 @@ Point::Point()
     this->y = 0;
 }
 
-Point::Point(double x, double y)
+Point::Point(int x, int y)
 {
     this->x = x;
     this->y = y;
@@ -23,23 +23,44 @@ Point::~Point()
     
 }
 
-double Point::getX()
+int Point::getX()
 {
     return this->x;
 }
 
-double Point::getY()
+int Point::getY()
 {
     return this->y;
 }
 
-void Point::setX(double x)
+void Point::setX(int x)
 {
     this->x = x;
 }
 
-void Point::setY(double y)
+void Point::setY(int y)
 {
     this->y = y;
 }
 
+void Point::incX()
+{
+    this->x++;
+}
+
+void Point::incY()
+{
+    this->y++;
+}
+
+void Point::inc()
+{
+    this->x++;
+    this->y++;
+}
+
+void Point::inc(int i)
+{
+    this->x += i;
+    this->y += i;
+}
