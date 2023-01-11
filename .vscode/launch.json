@@ -12,7 +12,8 @@
       "internalConsoleOptions": "openOnSessionStart",
       "environment": [],
       "console": "integratedTerminal",
-      "preLaunchTask": "Build"
+      "preLaunchTask": "Build",
+      "postDebugTask": "clean"
     },
     {
       "name": "(MacOS) Launch",
@@ -26,7 +27,8 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "lldb",
-      "preLaunchTask": "Build"
+      "preLaunchTask": "Build",
+      "postDebugTask": "clean"
     }
   ]
 }
