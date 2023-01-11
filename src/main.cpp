@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
 		// Move each point
 		// p1.increment();
+		// Lol SUCK IT Daniel now the line just grows
 		p2.increment();
 
 		// Wait about 1/60 of a second
