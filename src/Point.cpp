@@ -7,7 +7,7 @@ Point::Point()
     this->z = 0;
 }
 
-Point::Point(int x, int y)
+Point::Point(int x, int y, int z)
 {
     this->x = x;
     this->y = y;
@@ -79,6 +79,6 @@ void Point::increment(int i)
     this->z += i;
 }
 
-void Point::rotate(Point point)
+void Point::rotate(Point point, double angle)
 {
 }
