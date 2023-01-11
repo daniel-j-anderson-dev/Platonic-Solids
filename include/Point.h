@@ -18,6 +18,7 @@ public:
     void setY(int y);
     void setZ(int z);
 
+    void rotate(Point point);
 
     // replace with operator overload l8r
     void incrementX();
