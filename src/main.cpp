@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	while (true)
 	{
 		// TODO: Handle quit event
+		// Here we can see a little bit of Daniel's CRINGE
 		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
 		{
 			break;
