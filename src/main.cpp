@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
 
 		p2.setX(p2.getX() + 1);
 		p2.setY(p2.getY() + 1);
-		
-		SDL_Delay(100);
+
+		SDL_Delay(17); // about 1/60 of a second
 	}
 
 	// Clean up
