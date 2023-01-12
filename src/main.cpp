@@ -12,8 +12,13 @@ int main(int argc, char *argv[])
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	// Create points to draw a line between
-	Point p1 = Point(10, 10);
-	Point p2 = Point(100, 100);
+	Point p1 = Point(500,   480/2, 0);
+	Point p2 = Point(640/2, 480/2, 0);
+
+	//Point axis = Point(0.57735026919, 0.57735026919, 0.57735026919);	// 👍
+	Point axis = Point(0, 0, 1); 
+
+	double angle = 0;
 
 	// Wait for the user to close the window
 	SDL_Event event;
@@ -38,7 +43,10 @@ int main(int argc, char *argv[])
 		// Move each point
 		// p1.increment();
 		// Lol SUCK IT Daniel now the line just grows
-		p2.increment();
+		// p2.increment();
+
+		// angle++;
+		p1.rotate(p2, axis, M_PI/2);
 
 		// Wait about 1/60 of a second
 		SDL_Delay(17); 

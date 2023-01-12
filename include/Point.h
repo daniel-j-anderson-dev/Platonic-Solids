@@ -7,31 +7,48 @@ class Point
 {
 public:
     Point();
-    Point(int x, int y, int z);
+    Point(double x, double y, double z);
     Point(Point* point);
     ~Point();
     
-    int  getX();
-    int  getY();
-    int  getZ();
-    void setX(int x);
-    void setY(int y);
-    void setZ(int z);
+    double getX();
+    double getY();
+    double getZ();
+    void   setX(double x);
+    void   setY(double y);
+    void   setZ(double z);
 
-    void rotate(Point point);
+    // equal operator overload
+    Point* operator=(Point point);
+    Point* operator+(Point point);
+    Point* operator-(Point point);
+
+    // Rotates this about podouble with an
+    // this function acts on a podouble P.
+    // it will rotate P angle degrees about an arbitrary axis
+    // given by a normalized vector and the origin
+
+    // I want to store the axis as one variable
+    // I dont want to use a podouble to represent the axis because it uses ints
+    // which would lock me in to integer multiples of angles
+    // I dont use doubles in the podouble class becasue the sdl draw funciton wants ints
+
+    // I could make the Podouble class use doubles and cast to double to draw
+
+    void rotate(Point point, Point axis, double angle);
 
     // replace with operator overload l8r
     void incrementX();
     void incrementY();
     void incrementZ();
     void increment();
-    void increment(int i);
+    void increment(double i);
 
 private:
 
-    int x;
-    int y;
-    int z;
+    double x;
+    double y;
+    double z;
 
 };
 

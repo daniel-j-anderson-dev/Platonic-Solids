@@ -1,4 +1,7 @@
 #include "../include/Point.h"
+#include <cmath>
+#include <iostream>
+#include <stdlib.h>
 
 Point::Point()
 {
@@ -7,7 +10,7 @@ Point::Point()
     this->z = 0;
 }
 
-Point::Point(int x, int y)
+Point::Point(double x, double y, double z)
 {
     this->x = x;
     this->y = y;
@@ -25,34 +28,58 @@ Point::~Point()
 {
 }
 
-int Point::getX()
+double Point::getX()
 {
     return this->x;
 }
 
-int Point::getY()
+double Point::getY()
 {
     return this->y;
 }
 
-int Point::getZ()
+double Point::getZ()
 {
     return this->z;
 }
 
-void Point::setX(int x)
+void Point::setX(double x)
 {
     this->x = x;
 }
 
-void Point::setY(int y)
+void Point::setY(double y)
 {
     this->y = y;
 }
 
-void Point::setZ(int z)
+void Point::setZ(double z)
 {
     this->z = z;
+}
+
+Point* Point::operator=(Point point)
+{
+    this->x = point.getX();
+    this->y = point.getY();
+    this->z = point.getZ();
+    return this;
+}
+
+Point* Point::operator+(Point point)
+{    
+    this->x += point.getX();
+    this->y += point.getY();
+    this->z += point.getZ();
+    return this;
+}
+
+Point* Point::operator-(Point point)
+{    
+    this->x -= point.getX();
+    this->y -= point.getY();
+    this->z -= point.getZ();
+    return this;
 }
 
 void Point::incrementX()
@@ -72,13 +99,50 @@ void Point::increment()
     this->z++;
 }
 
-void Point::increment(int i)
+void Point::increment(double i)
 {
     this->x += i;
     this->y += i;
     this->z += i;
 }
 
-void Point::rotate(Point point)
+void Point::rotate(Point point, Point axis, double angle)
 {
+    // define the four seperate parts of a quaternion
+    // i need the real part, and the i, j, and k coefficients
+    // they will be represnted as four separate variables
+
+    /*  angle = math.radians(angle)
+        x, y, z = point[0], point[1], point[2]
+        a = 1 * math.cos(angle/2)
+        b = axis[0] * math.sin(angle/2)
+        c = axis[1] * math.sin(angle/2)
+        d = axis[2] * math.sin(angle/2)
+        return [(x*(1 - 2*c**2 - 2*d**2) + y*(2*b*c - 2*d*a) + z*(2*b*d + 2*c*a)),
+                (x*(2*b * c + 2*d*a) + y*(1 - 2*b**2 - 2*d**2) + z*(2*c*d - 2*b*a)),
+                (x*(2*b * d - 2*c*a) + y*(2*c*d + 2*b*a) + z*(1 - 2*b**2 - 2*c**2))]
+    */
+    angle /= 2;
+
+    double x = point.getX();
+    double y = point.getY();
+    double z = point.getZ();
+
+    double a = cos(angle);
+    double b = axis.getX() * sin(angle);
+    double c = axis.getY() * sin(angle);
+    double d = axis.getZ() * sin(angle);
+
+    Point rotatedPoint = Point((x * (1 - 2 * pow(c, 2) - 2 * pow(d, 2)) + y * (2 * b * c - 2 * d * a)             + z * (2 * b * d + 2 * c * a)),
+                               (x * (2 * b * c + 2 * d * a)             + y * (1 - 2 * pow(b, 2) - 2 * pow(d, 2)) + z * (2 * c * d - 2 * b * a)),
+                               (x * (2 * b * d - 2 * c * a)             + y * (2 * c * d + 2 * b * a)             + z * (1 - 2 * pow(b, 2) - 2 * pow(c, 2))));
+    
+    std::cout << "x: " << rotatedPoint.getX() << '\t';
+    std::cout << "y: " << rotatedPoint.getY() << '\t';
+    std::cout << "z: " << rotatedPoint.getZ() << std::endl;
+
+    system("CLS");
+
+    *this = rotatedPoint;
 }
+
