@@ -82,30 +82,6 @@ Point* Point::operator-(Point point)
     return this;
 }
 
-void Point::incrementX()
-{
-    this->x++;
-}
-
-void Point::incrementY()
-{
-    this->y++;
-}
-
-void Point::increment()
-{
-    this->x++;
-    this->y++;
-    this->z++;
-}
-
-void Point::increment(double i)
-{
-    this->x += i;
-    this->y += i;
-    this->z += i;
-}
-
 void Point::rotate(Point point, Point axis, double angle)
 {
     // define the four seperate parts of a quaternion

@@ -37,13 +37,6 @@ public:
 
     void rotate(Point point, Point axis, double angle);
 
-    // replace with operator overload l8r
-    void incrementX();
-    void incrementY();
-    void incrementZ();
-    void increment();
-    void increment(double i);
-
 private:
 
     double x;
