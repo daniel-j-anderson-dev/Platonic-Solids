@@ -111,6 +111,13 @@ Quaternion* Quaternion::operator-(Quaternion quaternion)
  * t1 = (r0s1 + r1s0 − r2s3 + r3s2)
  * t2 = (r0s2 + r1s3 + r2s0 − r3s1)
  * t3 = (r0s3 − r1s2 + r2s1 + r3s0)
+ * 
+ * or, more correctly:
+ * 
+ * t0 = (r0s0 - r1s1 - r2s2 - r3s3)
+ * t1 = (r0s1 + r1s0 + r2s3 - r3s2)
+ * t2 = (r0s2 - r1s3 + r2s0 + r3s1)
+ * t3 = (r0s3 + r1s2 - r2s1 + r3s0)
  **********************************************/
 Quaternion Quaternion::operator*(Quaternion quaternion)
 {
