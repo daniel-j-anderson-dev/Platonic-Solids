@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	// Point axis = Point(0.57735026919, 0.57735026919, 0.57735026919);	// 👍
 	Point axis = Point(0, 0, 1);
 
-	double angle = 0;
+	double angle = .01;
 
 	// Wait for the user to close the window
 	SDL_Event event;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		// Lol SUCK IT Daniel now the line just grows
 		// p2.increment();
 
-		angle += 0.01;
+		//angle += 0.01;
 		p1.rotate(p2, axis, angle);
 
 		// Wait about 1/60 of a second

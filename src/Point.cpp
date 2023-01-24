@@ -1,4 +1,5 @@
 #include "../include/Point.h"
+#include "../include/Quaternion.h"
 #include <cmath>
 #include <iostream>
 #include <stdlib.h>
@@ -12,16 +13,16 @@ Point::Point()
 
 Point::Point(double x, double y, double z)
 {
-    this->x = x;
-    this->y = y;
-    this->z = z;
+    this->setX(x);
+    this->setY(y);
+    this->setZ(z);
 }
 
 Point::Point(Point *point)
 {
-    this->x = point->x;
-    this->y = point->y;
-    this->z = point->z;
+    this->setX(point->getX());
+    this->setY(point->getY());
+    this->setZ(point->getZ());
 }
 
 Point::~Point()
@@ -58,7 +59,7 @@ void Point::setZ(double z)
     this->z = z;
 }
 
-Point *Point::operator=(Point point)
+Point* Point::operator=(Point point)
 {
     this->x = point.getX();
     this->y = point.getY();
@@ -66,7 +67,7 @@ Point *Point::operator=(Point point)
     return this;
 }
 
-Point *Point::operator+(Point point)
+Point* Point::operator+(Point point)
 {
     this->x += point.getX();
     this->y += point.getY();
@@ -74,7 +75,7 @@ Point *Point::operator+(Point point)
     return this;
 }
 
-Point *Point::operator-(Point point)
+Point* Point::operator-(Point point)
 {
     this->x -= point.getX();
     this->y -= point.getY();
@@ -82,38 +83,74 @@ Point *Point::operator-(Point point)
     return this;
 }
 
+Point* Point::operator*(Point point)
+{
+    this->x *= point.getX();
+    this->y *= point.getY();
+    this->z *= point.getZ();
+    return this;
+}
+
+Point* Point::operator/(Point point)
+{
+    this->x /= point.getX();
+    this->y /= point.getY();
+    this->z /= point.getZ();
+    return this;
+}
+
+/************************************************************
+ * \param point point to rotate this about this will be used
+ *              to translate to the origin for calculation
+ * \param aixs  UNIT vector representing the axis of rotation
+ *              (THE NORM OF THIS MUST BE EQUAL TO 1)
+ * \param angle amount to rotate this about axis
+ * 
+ * This function will create a rotation quaternion based on
+ * the the axis and angle, and translate the this and point
+ ************************************************************/
+// void Point::rotate(Point pointOfRotation, Point axis, double angle)
+// {
+//     Quaternion rotation = Quaternion(          1 * cos(angle / 2),
+//                                      axis.getX() * sin(angle / 2),
+//                                      axis.getY() * sin(angle / 2),
+//                                      axis.getZ() * sin(angle / 2));
+    
+//     Quaternion original = Quaternion(0,
+//                                      this->getX() - pointOfRotation.getX(),
+//                                      this->getY() - pointOfRotation.getY(),
+//                                      this->getZ() - pointOfRotation.getZ());
+//     //O'=R.inverse * original * R
+
+//     Quaternion a = rotation.getInverse() * original;
+//     a = a * rotation;
+
+//     //Quaternion product = Quaternion(rotation.getInverse() * original);
+//     //product = product * rotation;
+
+//     Point rotatedPoint = Point(a.getQ1() + pointOfRotation.getX(),
+//                                a.getQ2() + pointOfRotation.getY(),
+//                                a.getQ3() + pointOfRotation.getZ());
+
+//     *this = rotatedPoint;
+// }
+
 void Point::rotate(Point point, Point axis, double angle)
 {
-    // define the four seperate parts of a quaternion
-    // i need the real part, and the i, j, and k coefficients
-    // they will be represnted as four separate variables
+    double x = this->getX() - point.getX();
+    double y = this->getY() - point.getY();
+    double z = this->getZ() - point.getZ();
 
-    /*  angle = math.radians(angle)
-        x, y, z = point[0], point[1], point[2]
-        a = 1 * math.cos(angle/2)
-        b = axis[0] * math.sin(angle/2)
-        c = axis[1] * math.sin(angle/2)
-        d = axis[2] * math.sin(angle/2)
-        return [(x*(1 - 2*c**2 - 2*d**2) + y*(2*b*c - 2*d*a) + z*(2*b*d + 2*c*a)),
-                (x*(2*b * c + 2*d*a) + y*(1 - 2*b**2 - 2*d**2) + z*(2*c*d - 2*b*a)),
-                (x*(2*b * d - 2*c*a) + y*(2*c*d + 2*b*a) + z*(1 - 2*b**2 - 2*c**2))]
-    */
-    angle /= 2;
-
-    double x = point.getX();
-    double y = point.getY();
-    double z = point.getZ();
-
-    double a = cos(angle);
-    double b = axis.getX() * sin(angle);
-    double c = axis.getY() * sin(angle);
-    double d = axis.getZ() * sin(angle);
+    double a =               cos(angle / 2);
+    double b = axis.getX() * sin(angle / 2);
+    double c = axis.getY() * sin(angle / 2);
+    double d = axis.getZ() * sin(angle / 2);
 
     double newX = (x * (1 - 2 * c * c - 2 * d * d) + y * (2 * b * c - 2 * d * a) + z * (2 * b * d + 2 * c * a));
     double newY = (x * (2 * b * c + 2 * d * a) + y * (1 - 2 * b * b - 2 * b * b) + z * (2 * c * d - 2 * b * a));
     double newZ = (x * (2 * b * d - 2 * c * a) + y * (2 * c * d + 2 * b * a) + z * (1 - 2 * b * b - 2 * c * c));
 
-    Point rotatedPoint = Point(newX, newY, newZ);
+    Point rotatedPoint = Point(newX + point.getX(), newY + point.getY(), newZ + point.getZ());
 
     std::cout << "x: " << rotatedPoint.getX() << '\t';
     std::cout << "y: " << rotatedPoint.getY() << '\t';
@@ -122,28 +159,4 @@ void Point::rotate(Point point, Point axis, double angle)
     system("CLS");
 
     *this = rotatedPoint;
-
-    /*
-        
-        Rotating a point about a point along an arbitrary axis defined by a vector can be done using quaternions. 
-        Quaternions are a mathematical construct that can be used to represent rotations in 3D space. Here's a 
-        general process for rotating a point A about point B along an arbitrary axis defined by a vector using quaternions:
-        Translate point B to the origin. This can be done by subtracting the coordinates of point B from the 
-        coordinates of point A. This will make point B the new origin, and point A will be relative to point B.
-        Create a quaternion that represents the rotation. This can be done using the axis-angle representation 
-        of a quaternion, where the axis is the arbitrary vector that defines the rotation axis and the angle is 
-        the amount of rotation.
-        Multiply the quaternion that represents the point A by the quaternion that represents the rotation. 
-        This is the quaternion multiplication.
-        Convert the result from the quaternion multiplication back into Cartesian coordinates.
-        Translate point A back to its original position by adding the coordinates of point B to the coordinates 
-        of the rotated point A.
-        It is important to note that quaternion multiplication is non-commutative, meaning the order of multiplication 
-        matters. Therefore, the order of step 3 is crucial, it should be point times rotation, If rotation quaternion 
-        is multiplied with point quaternion, the result will not be correct.
-        Another way to achieve the same result is using rotation matrix, you can use the rotation matrix to rotate 
-        point A about point B along the arbitrary axis, but quaternion is more computationally efficient when it comes 
-        to rotating a large number of points, especially when you are doing rotation in real-time.
-        
-    */
 }
