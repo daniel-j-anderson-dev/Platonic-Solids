@@ -8,12 +8,12 @@ Quaternion::Quaternion()
     this->q3 = 0;
 }
 
-Quaternion::Quaternion(Quaternion* quaternion)
+Quaternion::Quaternion(const Quaternion &quaternion)
 {
-    this->setQ0(quaternion->getQ0());
-    this->setQ1(quaternion->getQ1());
-    this->setQ2(quaternion->getQ2());
-    this->setQ3(quaternion->getQ3());
+    this->setQ0(quaternion.q0);
+    this->setQ1(quaternion.q1);
+    this->setQ2(quaternion.q2);
+    this->setQ3(quaternion.q3);
 }
 
 Quaternion::Quaternion(double q0, double q1, double q2, double q3)
@@ -112,16 +112,11 @@ Quaternion* Quaternion::operator-(Quaternion quaternion)
  * t2 = (r0s2 + r1s3 + r2s0 − r3s1)
  * t3 = (r0s3 − r1s2 + r2s1 + r3s0)
  **********************************************/
-Quaternion* Quaternion::operator*(Quaternion quaternion)
+Quaternion Quaternion::operator*(Quaternion quaternion)
 {
     this->setQ0(this->getQ0()*quaternion.getQ0() - this->getQ1()*quaternion.getQ1() - this->getQ2()*quaternion.getQ2() - this->getQ3()*quaternion.getQ3());
     this->setQ1(this->getQ0()*quaternion.getQ1() + this->getQ1()*quaternion.getQ0() - this->getQ2()*quaternion.getQ3() + this->getQ3()*quaternion.getQ2());
     this->setQ2(this->getQ0()*quaternion.getQ2() + this->getQ1()*quaternion.getQ3() + this->getQ2()*quaternion.getQ0() - this->getQ3()*quaternion.getQ1());
     this->setQ3(this->getQ0()*quaternion.getQ3() - this->getQ1()*quaternion.getQ2() + this->getQ2()*quaternion.getQ1() + this->getQ3()*quaternion.getQ0());
-    return this;
-}
-
-Quaternion* Quaternion::operator/(Quaternion quaternion)
-{
-    return ((*this) * quaternion.getInverse());
+    return *this;
 }

@@ -7,7 +7,7 @@ class Quaternion
 {
 public:
     Quaternion();
-    Quaternion(Quaternion* quaternion);
+    Quaternion(const Quaternion &quaternion);
     Quaternion(double q0, double q1, double q2, double q3);
     ~Quaternion();
     
@@ -24,8 +24,7 @@ public:
     Quaternion* operator=(Quaternion quaternion);
     Quaternion* operator+(Quaternion quaternion);
     Quaternion* operator-(Quaternion quaternion);
-    Quaternion* operator*(Quaternion quaternion);
-    Quaternion* operator/(Quaternion quaternion);
+    Quaternion operator*(Quaternion quaternion);
 
 private:
 

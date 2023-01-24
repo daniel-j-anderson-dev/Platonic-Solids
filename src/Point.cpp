@@ -2,6 +2,7 @@
 #include "../include/Quaternion.h"
 #include <cmath>
 #include <iostream>
+#include <typeinfo>
 #include <stdlib.h>
 
 Point::Point()
@@ -109,54 +110,24 @@ Point* Point::operator/(Point point)
  * This function will create a rotation quaternion based on
  * the the axis and angle, and translate the this and point
  ************************************************************/
-// void Point::rotate(Point pointOfRotation, Point axis, double angle)
-// {
-//     Quaternion rotation = Quaternion(          1 * cos(angle / 2),
-//                                      axis.getX() * sin(angle / 2),
-//                                      axis.getY() * sin(angle / 2),
-//                                      axis.getZ() * sin(angle / 2));
-    
-//     Quaternion original = Quaternion(0,
-//                                      this->getX() - pointOfRotation.getX(),
-//                                      this->getY() - pointOfRotation.getY(),
-//                                      this->getZ() - pointOfRotation.getZ());
-//     //O'=R.inverse * original * R
-
-//     Quaternion a = rotation.getInverse() * original;
-//     a = a * rotation;
-
-//     //Quaternion product = Quaternion(rotation.getInverse() * original);
-//     //product = product * rotation;
-
-//     Point rotatedPoint = Point(a.getQ1() + pointOfRotation.getX(),
-//                                a.getQ2() + pointOfRotation.getY(),
-//                                a.getQ3() + pointOfRotation.getZ());
-
-//     *this = rotatedPoint;
-// }
-
-void Point::rotate(Point point, Point axis, double angle)
+void Point::rotate(Point pointOfRotation, Point axis, double angle)
 {
-    double x = this->getX() - point.getX();
-    double y = this->getY() - point.getY();
-    double z = this->getZ() - point.getZ();
+    Quaternion rotation = Quaternion(          1 * cos(angle / 2),
+                                     axis.getX() * sin(angle / 2),
+                                     axis.getY() * sin(angle / 2),
+                                     axis.getZ() * sin(angle / 2));
+    
+    Quaternion original = Quaternion(0,
+                                     this->getX() - pointOfRotation.getX(),
+                                     this->getY() - pointOfRotation.getY(),
+                                     this->getZ() - pointOfRotation.getZ());
+    //O'=R.inverse * original * R
 
-    double a =               cos(angle / 2);
-    double b = axis.getX() * sin(angle / 2);
-    double c = axis.getY() * sin(angle / 2);
-    double d = axis.getZ() * sin(angle / 2);
+    Quaternion product = rotation.getInverse() * original * rotation;
 
-    double newX = (x * (1 - 2 * c * c - 2 * d * d) + y * (2 * b * c - 2 * d * a) + z * (2 * b * d + 2 * c * a));
-    double newY = (x * (2 * b * c + 2 * d * a) + y * (1 - 2 * b * b - 2 * b * b) + z * (2 * c * d - 2 * b * a));
-    double newZ = (x * (2 * b * d - 2 * c * a) + y * (2 * c * d + 2 * b * a) + z * (1 - 2 * b * b - 2 * c * c));
-
-    Point rotatedPoint = Point(newX + point.getX(), newY + point.getY(), newZ + point.getZ());
-
-    std::cout << "x: " << rotatedPoint.getX() << '\t';
-    std::cout << "y: " << rotatedPoint.getY() << '\t';
-    std::cout << "z: " << rotatedPoint.getZ() << std::endl;
-
-    system("CLS");
+    Point rotatedPoint = Point(product.getQ1() + pointOfRotation.getX(),
+                               product.getQ2() + pointOfRotation.getY(),
+                               product.getQ3() + pointOfRotation.getZ());
 
     *this = rotatedPoint;
 }
