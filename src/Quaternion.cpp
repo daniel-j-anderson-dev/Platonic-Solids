@@ -122,8 +122,8 @@ Quaternion* Quaternion::operator-(Quaternion quaternion)
 Quaternion Quaternion::operator*(Quaternion quaternion)
 {
     this->setQ0(this->getQ0()*quaternion.getQ0() - this->getQ1()*quaternion.getQ1() - this->getQ2()*quaternion.getQ2() - this->getQ3()*quaternion.getQ3());
-    this->setQ1(this->getQ0()*quaternion.getQ1() + this->getQ1()*quaternion.getQ0() - this->getQ2()*quaternion.getQ3() + this->getQ3()*quaternion.getQ2());
-    this->setQ2(this->getQ0()*quaternion.getQ2() + this->getQ1()*quaternion.getQ3() + this->getQ2()*quaternion.getQ0() - this->getQ3()*quaternion.getQ1());
-    this->setQ3(this->getQ0()*quaternion.getQ3() - this->getQ1()*quaternion.getQ2() + this->getQ2()*quaternion.getQ1() + this->getQ3()*quaternion.getQ0());
+    this->setQ1(this->getQ0()*quaternion.getQ1() + this->getQ1()*quaternion.getQ0() + this->getQ2()*quaternion.getQ3() - this->getQ3()*quaternion.getQ2());
+    this->setQ2(this->getQ0()*quaternion.getQ2() - this->getQ1()*quaternion.getQ3() + this->getQ2()*quaternion.getQ0() + this->getQ3()*quaternion.getQ1());
+    this->setQ3(this->getQ0()*quaternion.getQ3() + this->getQ1()*quaternion.getQ2() - this->getQ2()*quaternion.getQ1() + this->getQ3()*quaternion.getQ0());
     return *this;
 }
