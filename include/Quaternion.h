@@ -6,32 +6,35 @@
 class Quaternion
 {
 public:
+
     Quaternion();
-    Quaternion(const Quaternion &quaternion);
-    Quaternion(double q0, double q1, double q2, double q3);
+    Quaternion(const Quaternion &q);
+    Quaternion(double w, double x, double y, double z);
     ~Quaternion();
     
-    double getQ0();
-    double getQ1();
-    double getQ2();
-    double getQ3();
-    void   setQ0(double Q0);
-    void   setQ1(double Q1);
-    void   setQ2(double Q2);
-    void   setQ3(double Q3);
+    double W();
+    double X();
+    double Y();
+    double Z();
+    void   setW(double w);
+    void   setX(double x);
+    void   setY(double y);
+    void   setZ(double z);
+    
     Quaternion getInverse();
+    Point      toPoint();
 
-    Quaternion* operator=(Quaternion quaternion);
-    Quaternion* operator+(Quaternion quaternion);
-    Quaternion* operator-(Quaternion quaternion);
-    Quaternion operator*(Quaternion quaternion);
+    Quaternion* operator =(const Quaternion &q);
+    Quaternion* operator +(const Quaternion &q);
+    Quaternion* operator -(const Quaternion &q);
+    Quaternion  operator *(const Quaternion &q);
 
 private:
 
-    double q0;
-    double q1;
-    double q2;
-    double q3;
+    double w;
+    double x;
+    double y;
+    double z;
 
 };
 

@@ -21,26 +21,26 @@ Point::Point(double x, double y, double z)
 
 Point::Point(Point *point)
 {
-    this->setX(point->getX());
-    this->setY(point->getY());
-    this->setZ(point->getZ());
+    this->setX(point->X());
+    this->setY(point->Y());
+    this->setZ(point->Z());
 }
 
 Point::~Point()
 {
 }
 
-double Point::getX()
+double Point::X()
 {
     return this->x;
 }
 
-double Point::getY()
+double Point::Y()
 {
     return this->y;
 }
 
-double Point::getZ()
+double Point::Z()
 {
     return this->z;
 }
@@ -60,48 +60,39 @@ void Point::setZ(double z)
     this->z = z;
 }
 
+Quaternion Point::toQuaternion()
+{
+    Quaternion thisPointAsQuaternion = Quaternion(0, this->X(), this->Y(), this->Z());
+    return thisPointAsQuaternion;
+}
+
 Point* Point::operator=(Point point)
 {
-    this->x = point.getX();
-    this->y = point.getY();
-    this->z = point.getZ();
+    this->x = point.X();
+    this->y = point.Y();
+    this->z = point.Z();
     return this;
 }
 
 Point* Point::operator+(Point point)
 {
-    this->x += point.getX();
-    this->y += point.getY();
-    this->z += point.getZ();
+    this->x += point.X();
+    this->y += point.Y();
+    this->z += point.Z();
     return this;
 }
 
 Point* Point::operator-(Point point)
 {
-    this->x -= point.getX();
-    this->y -= point.getY();
-    this->z -= point.getZ();
+    this->x -= point.X();
+    this->y -= point.Y();
+    this->z -= point.Z();
     return this;
 }
 
-Point* Point::operator*(Point point)
-{
-    this->x *= point.getX();
-    this->y *= point.getY();
-    this->z *= point.getZ();
-    return this;
-}
-
-Point* Point::operator/(Point point)
-{
-    this->x /= point.getX();
-    this->y /= point.getY();
-    this->z /= point.getZ();
-    return this;
-}
 
 /************************************************************
- * \param point point to rotate this about this will be used
+ * \param pointOfRotation point to rotate this about this will be used
  *              to translate to the origin for calculation
  * \param aixs  UNIT vector representing the axis of rotation
  *              (THE NORM OF THIS MUST BE EQUAL TO 1)
@@ -112,22 +103,18 @@ Point* Point::operator/(Point point)
  ************************************************************/
 void Point::rotate(Point pointOfRotation, Point axis, double angle)
 {
-    Quaternion rotation = Quaternion(          1 * cos(angle / 2),
-                                     axis.getX() * sin(angle / 2),
-                                     axis.getY() * sin(angle / 2),
-                                     axis.getZ() * sin(angle / 2));
-    
-    Quaternion original = Quaternion(0,
-                                     this->getX() - pointOfRotation.getX(),
-                                     this->getY() - pointOfRotation.getY(),
-                                     this->getZ() - pointOfRotation.getZ());
-    //O'=R.inverse * original * R
+    Quaternion rotation = Quaternion(       1 * cos(angle / 2),
+                                     axis.X() * sin(angle / 2),
+                                     axis.Y() * sin(angle / 2),
+                                     axis.Z() * sin(angle / 2));
+
+    Quaternion original = (*this - pointOfRotation)->toQuaternion();
 
     Quaternion product = rotation.getInverse() * original * rotation;
+    
+    product = *(product + pointOfRotation.toQuaternion());
 
-    Point rotatedPoint = Point(product.getQ1() + pointOfRotation.getX(),
-                               product.getQ2() + pointOfRotation.getY(),
-                               product.getQ3() + pointOfRotation.getZ());
+    Point rotatedPoint = product.toPoint();
 
     *this = rotatedPoint;
 }

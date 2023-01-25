@@ -1,6 +1,7 @@
 #include "../include/SDL2/SDL.h"
 #include "../include/Point.h"
 #include "../include/Shape3D.h"
+#include "../include/Quaternion.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,9 @@ int main(int argc, char *argv[])
 
 	double angle = .01;
 
+	Quaternion q1 = Quaternion(2, 5, 6, 8);
+	Quaternion q1 = Quaternion(1, 1, 3, 4);
+
 	// Wait for the user to close the window
 	SDL_Event event;
 	while (true)
@@ -37,7 +41,7 @@ int main(int argc, char *argv[])
 
 		// Draw the line
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderDrawLine(renderer, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+		SDL_RenderDrawLine(renderer, p1.X(), p1.Y(), p2.X(), p2.Y());
 		SDL_RenderPresent(renderer);
 
 		// Move each point
