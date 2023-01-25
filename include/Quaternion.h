@@ -1,7 +1,8 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
-
 #pragma once
+
+#include "../include/Point.h"
 
 class Quaternion
 {
@@ -21,8 +22,8 @@ public:
     void   setY(double y);
     void   setZ(double z);
     
-    Quaternion getInverse();
-    Point      toPoint();
+    Quaternion   getInverse();
+    Point toPoint();
 
     Quaternion* operator =(const Quaternion &q);
     Quaternion* operator +(const Quaternion &q);

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	double angle = .01;
 
 	Quaternion q1 = Quaternion(2, 5, 6, 8);
-	Quaternion q1 = Quaternion(1, 1, 3, 4);
+	Quaternion q2 = Quaternion(1, 1, 3, 4);
 
 	// Wait for the user to close the window
 	SDL_Event event;

@@ -1,8 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
-
 #pragma once
 
+#include "../include/Quaternion.h"
 class Point
 {
 public:

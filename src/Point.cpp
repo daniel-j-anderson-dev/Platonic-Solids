@@ -1,5 +1,4 @@
 #include "../include/Point.h"
-#include "../include/Quaternion.h"
 #include <cmath>
 #include <iostream>
 #include <typeinfo>
