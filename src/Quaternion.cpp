@@ -1,5 +1,6 @@
 #include "../include/Quaternion.h"
 #include "../include/Point.h"
+#include <cmath>
 
 Quaternion::Quaternion()
 {
@@ -11,10 +12,10 @@ Quaternion::Quaternion()
 
 Quaternion::Quaternion(const Quaternion &q)
 {
-    this->setW(q.W());
-    this->setX(q.X());
-    this->setY(q.Y());
-    this->setZ(q.Z());
+    this->setW(q.w);
+    this->setX(q.x);
+    this->setY(q.y);
+    this->setZ(q.z);
 }
 
 Quaternion::Quaternion(double w, double x, double y, double z)
@@ -29,22 +30,22 @@ Quaternion::~Quaternion()
 {
 }
 
-double Quaternion::W()
+double Quaternion::getW()
 {
     return this->w;
 }
 
-double Quaternion::X()
+double Quaternion::getX()
 {
     return this->x;
 }
 
-double Quaternion::Y()
+double Quaternion::getY()
 {
     return this->y;
 }
 
-double Quaternion::Z()
+double Quaternion::getZ()
 {
     return this->z;
 }
@@ -69,42 +70,52 @@ void   Quaternion::setZ(double z)
     this->z = z;
 }
 
-Quaternion Quaternion::getInverse()
+double Quaternion::norm()
 {
-    Quaternion inverse = Quaternion(this->W(), -1 * this->X(), -1 * this->Y(), -1 * this->Z());
-    return inverse;
+    double w2 = this->w * this->w;
+    double x2 = this->x * this->x;
+    double y2 = this->y * this->y;
+    double z2 = this->z * this->z;
+    return sqrt(w2 + x2 + y2 + z2);
 }
 
-Point Quaternion::toPoint()
+Quaternion Quaternion::conjugate()
 {
-    Point thisQuaternionAsPoint = Point(this->X(), this->Y(), this->Z());
-    return thisQuaternionAsPoint;
+    return Quaternion(this->w, -1 * this->x, -1 * this->y, -1 * this->z);
 }
+
+Quaternion Quaternion::inverse()
+{
+    double     norm2 = this->norm() * this->norm();
+    Quaternion conj  = this->conjugate();
+    return Quaternion(conj.w/norm2, conj.x/norm2, conj.y/norm2, conj.z/norm2);
+}
+
 
 Quaternion* Quaternion::operator =(const Quaternion &q)
 {
-    this->setW(q.W());
-    this->setX(q.X());
-    this->setY(q.Y());
-    this->setZ(q.Z());
+    this->setW(q.w);
+    this->setX(q.x);
+    this->setY(q.y);
+    this->setZ(q.z);
     return this;
 }
 
 Quaternion* Quaternion::operator +(const Quaternion &q)
 {
-    this->setW(this->W() + q.W());
-    this->setX(this->X() + q.X());
-    this->setY(this->Y() + q.Y());
-    this->setZ(this->Z() + q.Z());
+    this->setW(this->w + q.w);
+    this->setX(this->x + q.x);
+    this->setY(this->y + q.y);
+    this->setZ(this->z + q.z);
     return this;
 }
 
 Quaternion* Quaternion::operator -(const Quaternion &q)
 {
-    this->setW(this->W() - q.W());
-    this->setX(this->X() - q.X());
-    this->setY(this->Y() - q.Y());
-    this->setZ(this->Z() - q.Z());
+    this->setW(this->w - q.w);
+    this->setX(this->x - q.x);
+    this->setY(this->y - q.y);
+    this->setZ(this->z - q.z);
     return this;
 }
 
@@ -121,9 +132,9 @@ Quaternion* Quaternion::operator -(const Quaternion &q)
  **********************************************/
 Quaternion Quaternion::operator *(const Quaternion &q)
 {
-    Quaternion product = Quaternion(this->W()*q.W() - this->X()*q.X() - this->Y()*q.Y() - this->Z()*q.Z(),
-                                    this->W()*q.X() + this->X()*q.W() + this->Y()*q.Z() - this->Z()*q.Y(),
-                                    this->W()*q.Y() - this->X()*q.Z() + this->Y()*q.W() + this->Z()*q.X(),
-                                    this->W()*q.Z() + this->X()*q.Y() - this->Y()*q.X() + this->Z()*q.W())
+    Quaternion product = Quaternion(this->w*q.w - this->x*q.x - this->y*q.y - this->z*q.z,
+                                    this->w*q.x + this->x*q.w + this->y*q.z - this->z*q.y,
+                                    this->w*q.y - this->x*q.z + this->y*q.w + this->z*q.x,
+                                    this->w*q.z + this->x*q.y - this->y*q.x + this->z*q.w);
     return product;
 }

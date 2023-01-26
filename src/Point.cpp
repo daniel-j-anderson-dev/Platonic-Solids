@@ -1,8 +1,5 @@
 #include "../include/Point.h"
 #include <cmath>
-#include <iostream>
-#include <typeinfo>
-#include <stdlib.h>
 
 Point::Point()
 {
@@ -20,26 +17,26 @@ Point::Point(double x, double y, double z)
 
 Point::Point(Point *point)
 {
-    this->setX(point->X());
-    this->setY(point->Y());
-    this->setZ(point->Z());
+    this->setX(point->getX());
+    this->setY(point->getY());
+    this->setZ(point->getZ());
 }
 
 Point::~Point()
 {
 }
 
-double Point::X()
+double Point::getX()
 {
     return this->x;
 }
 
-double Point::Y()
+double Point::getY()
 {
     return this->y;
 }
 
-double Point::Z()
+double Point::getZ()
 {
     return this->z;
 }
@@ -59,33 +56,27 @@ void Point::setZ(double z)
     this->z = z;
 }
 
-Quaternion Point::toQuaternion()
-{
-    Quaternion thisPointAsQuaternion = Quaternion(0, this->X(), this->Y(), this->Z());
-    return thisPointAsQuaternion;
-}
-
 Point* Point::operator=(Point point)
 {
-    this->x = point.X();
-    this->y = point.Y();
-    this->z = point.Z();
+    this->x = point.getX();
+    this->y = point.getY();
+    this->z = point.getZ();
     return this;
 }
 
 Point* Point::operator+(Point point)
 {
-    this->x += point.X();
-    this->y += point.Y();
-    this->z += point.Z();
+    this->x += point.getX();
+    this->y += point.getY();
+    this->z += point.getZ();
     return this;
 }
 
 Point* Point::operator-(Point point)
 {
-    this->x -= point.X();
-    this->y -= point.Y();
-    this->z -= point.Z();
+    this->x -= point.getX();
+    this->y -= point.getY();
+    this->z -= point.getZ();
     return this;
 }
 
@@ -102,18 +93,19 @@ Point* Point::operator-(Point point)
  ************************************************************/
 void Point::rotate(Point pointOfRotation, Point axis, double angle)
 {
-    Quaternion rotation = Quaternion(       1 * cos(angle / 2),
-                                     axis.X() * sin(angle / 2),
-                                     axis.Y() * sin(angle / 2),
-                                     axis.Z() * sin(angle / 2));
+    Quaternion rotation = Quaternion(     1 * cos(angle / 2),
+                                     axis.x * sin(angle / 2),
+                                     axis.y * sin(angle / 2),
+                                     axis.z * sin(angle / 2));
 
-    Quaternion original = (*this - pointOfRotation)->toQuaternion();
+    Quaternion original = Quaternion(0,
+                                     this->x - pointOfRotation.x,
+                                     this->y - pointOfRotation.y,
+                                     this->z - pointOfRotation.z);
 
-    Quaternion product = rotation.getInverse() * original * rotation;
-    
-    product = *(product + pointOfRotation.toQuaternion());
+    Quaternion product = rotation.inverse() * original * rotation;
 
-    Point rotatedPoint = product.toPoint();
+    Point rotatedPoint = Point(product.getX() + pointOfRotation.x, product.getY() + pointOfRotation.y, product.getZ() + pointOfRotation.z);
 
     *this = rotatedPoint;
 }
