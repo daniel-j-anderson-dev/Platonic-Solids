@@ -2,7 +2,6 @@
 #include "../include/Point.h"
 #include "../include/Shape3D.h"
 #include "../include/Quaternion.h"
-#include <string>
 const int WINDOW_WIDTH  = 1920;
 const int WINDOW_HEIGHT = 1080;
 const Point ORIGIN = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
@@ -77,7 +76,7 @@ int main(int argc, char *argv[])
 	Point  point  = Point(250, WINDOW_HEIGHT/2, 0);
 	Point  axis   = Point(0, 0, 1);
 	double angle  = 1;
-	
+
 	SDL_Event event;
 	while (true)
 	{
