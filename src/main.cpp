@@ -22,8 +22,12 @@ void clearScreen(SDL_Renderer* renderer)
 	SDL_RenderClear(renderer);
 }
 
-void handleInput(SDL_Event event, Point &point)
+// Returns true if escape is pressed
+bool handleInput(SDL_Event event, Shape3D &shape)
 {
+	double movementSpeed = 10;
+	double angle 	 = .1;
+	Point  axis			 = Point(0, 0, 0);
 	if (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_KEYDOWN)
@@ -31,36 +35,45 @@ void handleInput(SDL_Event event, Point &point)
 			SDL_Keycode key = event.key.keysym.sym;
 			if (key == SDLK_a)
 			{
-				point.rotate(ORIGIN, xAxis, .01);
+				axis.setX(1);
+				angle = .1;
 			}
 			if (key == SDLK_d)
 			{
-				point.rotate(ORIGIN, xAxis, -.01);
+				axis.setX(1);
+				angle = -.1;
 			}
 			if (key == SDLK_w)
 			{
-				point.rotate(ORIGIN, yAxis, .01);
+				axis.setY(1);
+				angle = .1;
 			}
 			if (key == SDLK_s)
 			{
-				point.rotate(ORIGIN, yAxis, -.01);
-			}
-			if (key == SDLK_q)
-			{
-				point.rotate(ORIGIN, zAxis, .01);
+				axis.setY(1);
+				angle = -.1;
 			}
 			if (key == SDLK_e)
 			{
-				point.rotate(ORIGIN, zAxis, -.01);
+				axis.setZ(1);
+				angle = .1;
+			}
+			if (key == SDLK_q)
+			{
+				axis.setZ(1);
+				angle = -.1;
 			}
 
+			shape.rotate(axis, angle);
+
+			//quit
 			if (key == SDLK_ESCAPE)
 			{
-				SDL_Quit();
-				exit(0);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 int main(int argc, char *argv[])
@@ -73,18 +86,24 @@ int main(int argc, char *argv[])
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	// Create point to draw a line between and angle and axis to rotate about
-	Point  point  = Point(250, WINDOW_HEIGHT/2, 0);
-	Point  axis   = Point(0, 0, 1);
-	double angle  = 1;
+	// Point  point  = Point(250, WINDOW_HEIGHT/2, 0);
+	Shape3D cube  = Shape3D("Cube");
 
 	SDL_Event event;
 	while (true)
 	{
 		clearScreen(renderer);
 
-		drawLine(renderer, point, ORIGIN);
+		cube.draw(renderer, ORIGIN);
 
-		handleInput(event, point);
+		handleInput(event, cube);
+		// drawLine(renderer, point, ORIGIN);
+
+
+		// if(handleInput(event, point))
+		// {
+		// 	break;	// stop execution if esc is pressed
+		// }
 	}
 
 	// Clean up

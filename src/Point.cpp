@@ -91,21 +91,37 @@ Point* Point::operator-(Point point)
  * This function will create a rotation quaternion based on
  * the the axis and angle, and translate the this and point
  ************************************************************/
-void Point::rotate(Point pointOfRotation, Point axis, double angle)
+// void Point::rotate(Point pointOfRotation, Point axis, double angle)
+// {
+//     Quaternion rotation = Quaternion(     1 * cos(angle / 2),
+//                                      axis.x * sin(angle / 2),
+//                                      axis.y * sin(angle / 2),
+//                                      axis.z * sin(angle / 2));
+
+//     Quaternion original = Quaternion(0,
+//                                      this->x - pointOfRotation.x,
+//                                      this->y - pointOfRotation.y,
+//                                      this->z - pointOfRotation.z);
+
+//     Quaternion product = rotation.inverse() * original * rotation;
+
+//     Point rotatedPoint = Point(product.getX() + pointOfRotation.x, product.getY() + pointOfRotation.y, product.getZ() + pointOfRotation.z);
+
+//     *this = rotatedPoint;
+// }
+
+Point Point::rotate(Point axis, double angle)
 {
     Quaternion rotation = Quaternion(     1 * cos(angle / 2),
                                      axis.x * sin(angle / 2),
                                      axis.y * sin(angle / 2),
                                      axis.z * sin(angle / 2));
 
-    Quaternion original = Quaternion(0,
-                                     this->x - pointOfRotation.x,
-                                     this->y - pointOfRotation.y,
-                                     this->z - pointOfRotation.z);
+    Quaternion original = Quaternion(0, this->x, this->y, this->z);
 
     Quaternion product = rotation.inverse() * original * rotation;
 
-    Point rotatedPoint = Point(product.getX() + pointOfRotation.x, product.getY() + pointOfRotation.y, product.getZ() + pointOfRotation.z);
+    Point rotatedPoint = Point(product.getX(), product.getY(), product.getZ());
 
-    *this = rotatedPoint;
+    return rotatedPoint;
 }

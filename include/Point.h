@@ -23,7 +23,8 @@ public:
     Point* operator-(Point point);
 
 
-    void rotate(Point pointOfRotation, Point axis, double angle);
+    //void rotate(Point pointOfRotation, Point axis, double angle);
+    Point rotate(Point axis, double angle); // Rotates about SDL's origin
 
 private:
 
