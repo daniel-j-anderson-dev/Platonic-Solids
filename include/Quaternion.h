@@ -15,6 +15,7 @@ public:
     double getX();
     double getY();
     double getZ();
+    
     void   setW(double w);
     void   setX(double x);
     void   setY(double y);

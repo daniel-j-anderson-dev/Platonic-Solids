@@ -1,0 +1,43 @@
+Have a camera
+Have a single platonic solid
+Prompt user to select a platonic solid
+Use perspective projection to display selected solid
+Allow control position of camera
+Allow control orientation of camera
+Allow control position of shape 
+Allow control orientation of shape
+Allow for control to end execution
+
+* = Classes
+~ = Functions
+' = Variables
+? = Question
+
+Classes
+    Model
+        *Camera
+        *Shape3D
+            *Point3D
+                'double x
+                'double y
+                'double z
+            *Quaternion
+                'double w
+                'double x
+                'double y
+                'double z
+            'vector<Point3D> vertices
+            'vector<pair<int, int>> edges           
+    View
+        *SDL_Window
+        *SDL_Renderer
+        *Helper Class
+            ~drawLine
+            ~clearScreen
+    Controller
+        *Event handler
+            ~ChangeShapeOrientation
+            ~ChangeShapePosition
+            ~ChangeCameraOrientation
+            ~ChangeCameraPosition
+            ~ChangeEndExecution

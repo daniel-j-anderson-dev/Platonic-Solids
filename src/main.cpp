@@ -2,9 +2,12 @@
 #include "../include/Point.h"
 #include "../include/Shape3D.h"
 #include "../include/Quaternion.h"
+
 const int WINDOW_WIDTH  = 1920;
 const int WINDOW_HEIGHT = 1080;
+
 const Point ORIGIN = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
+
 const Point xAxis  = Point(1, 0, 0);
 const Point yAxis  = Point(0, 1, 0);
 const Point zAxis  = Point(0, 0, 1);
@@ -26,8 +29,9 @@ void clearScreen(SDL_Renderer* renderer)
 bool handleInput(SDL_Event event, Shape3D &shape)
 {
 	double movementSpeed = 10;
-	double angle 	 = .1;
+	double angle 	 	 = .1;
 	Point  axis			 = Point(0, 0, 0);
+	
 	if (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_KEYDOWN)
