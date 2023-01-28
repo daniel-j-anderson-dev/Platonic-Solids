@@ -11,29 +11,53 @@ Allow for control to end execution
 * = Classes
 ~ = Functions
 ' = Variables
-? = Question
+? = Question/Task
+# = Comment
 
 Classes
     Model
         *Camera
+            # Some SDL class that interacts with SDL_Renderer,
+            # We will investigate this with tutorials later.
+
+            'Quaternion position
+            'Quaternion orientation
+
+            'double fieldOfViewVertical
+            'nearViewingPlane
+
+            ~getPosition
+            ~setPosition
+            ~getOrientation
+            ~setOrientation
+
         *Shape3D
-            *Point3D
-                'double x
-                'double y
-                'double z
-            *Quaternion
-                'double w
-                'double x
-                'double y
-                'double z
-            'vector<Point3D> vertices
-            'vector<pair<int, int>> edges           
+            'vector<Quaternion> vertices
+            'vector<pair<int, int>> edges
+
+            ~addVertex
+            ~addEdge
+            ~removeVertex
+            ~removeEdge
+
+            ~getVertices
+            ~getEdges
+            ~setVertices
+            ~setEdges
+
+        *Quaternion
+            'double w
+            'double x
+            'double y
+            'double z
+
     View
         *SDL_Window
         *SDL_Renderer
         *Helper Class
             ~drawLine
             ~clearScreen
+
     Controller
         *Event handler
             ~ChangeShapeOrientation
