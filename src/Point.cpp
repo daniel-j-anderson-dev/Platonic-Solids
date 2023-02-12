@@ -56,6 +56,13 @@ void Point::setZ(double z)
     this->z = z;
 }
 
+void Point::setXYZ(double x, double y, double z)
+{
+    this->setX(x);
+    this->setY(y);
+    this->setZ(z);
+}
+
 Point* Point::operator=(Point point)
 {
     this->x = point.getX();
@@ -64,7 +71,7 @@ Point* Point::operator=(Point point)
     return this;
 }
 
-Point* Point::operator+(Point point)
+Point Point::operator+(Point point)
 {
     this->x += point.getX();
     this->y += point.getY();
@@ -72,56 +79,10 @@ Point* Point::operator+(Point point)
     return this;
 }
 
-Point* Point::operator-(Point point)
+Point Point::operator-(Point point)
 {
     this->x -= point.getX();
     this->y -= point.getY();
     this->z -= point.getZ();
     return this;
-}
-
-
-/************************************************************
- * \param pointOfRotation point to rotate this about this will be used
- *              to translate to the origin for calculation
- * \param aixs  UNIT vector representing the axis of rotation
- *              (THE NORM OF THIS MUST BE EQUAL TO 1)
- * \param angle amount to rotate this about axis
- * 
- * This function will create a rotation quaternion based on
- * the the axis and angle, and translate the this and point
- ************************************************************/
-// void Point::rotate(Point pointOfRotation, Point axis, double angle)
-// {
-//     Quaternion rotation = Quaternion(     1 * cos(angle / 2),
-//                                      axis.x * sin(angle / 2),
-//                                      axis.y * sin(angle / 2),
-//                                      axis.z * sin(angle / 2));
-
-//     Quaternion original = Quaternion(0,
-//                                      this->x - pointOfRotation.x,
-//                                      this->y - pointOfRotation.y,
-//                                      this->z - pointOfRotation.z);
-
-//     Quaternion product = rotation.inverse() * original * rotation;
-
-//     Point rotatedPoint = Point(product.getX() + pointOfRotation.x, product.getY() + pointOfRotation.y, product.getZ() + pointOfRotation.z);
-
-//     *this = rotatedPoint;
-// }
-
-Point Point::rotate(Point axis, double angle)
-{
-    Quaternion rotation = Quaternion(     1 * cos(angle / 2),
-                                     axis.x * sin(angle / 2),
-                                     axis.y * sin(angle / 2),
-                                     axis.z * sin(angle / 2));
-
-    Quaternion original = Quaternion(0, this->x, this->y, this->z);
-
-    Quaternion product = rotation.inverse() * original * rotation;
-
-    Point rotatedPoint = Point(product.getX(), product.getY(), product.getZ());
-
-    return rotatedPoint;
 }

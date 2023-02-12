@@ -2,13 +2,16 @@
 #define QUATERNION_H
 #pragma once
 
+#include "../include/Point.h"
+
 class Quaternion
 {
 public:
 
     Quaternion();
-    Quaternion(const Quaternion &q);
     Quaternion(double w, double x, double y, double z);
+    Quaternion(Point axis, double angle);
+    Quaternion(Point point);
     ~Quaternion();
     
     double getW();

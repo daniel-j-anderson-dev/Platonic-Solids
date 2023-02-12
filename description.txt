@@ -22,10 +22,14 @@ Classes
 
             'Quaternion position
             'Quaternion orientation
+            'double distToViewport
+            # size of view port is 1920x1080
 
             'double fieldOfViewVertical
-            'nearViewingPlane
-            ? Write here daniel
+            'double nearViewingPlane
+            'double farViewingPlane
+            # These will represent the frustum of the camera
+
 
             ~getPosition
             ~setPosition

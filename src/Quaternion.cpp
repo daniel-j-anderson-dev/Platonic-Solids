@@ -1,5 +1,4 @@
 #include "../include/Quaternion.h"
-#include "../include/Point.h"
 #include <cmath>
 
 Quaternion::Quaternion()
@@ -10,20 +9,28 @@ Quaternion::Quaternion()
     this->z = 0;
 }
 
-Quaternion::Quaternion(const Quaternion &q)
-{
-    this->setW(q.w);
-    this->setX(q.x);
-    this->setY(q.y);
-    this->setZ(q.z);
-}
-
 Quaternion::Quaternion(double w, double x, double y, double z)
 {
     this->setW(w);
     this->setX(x);
     this->setY(y);
     this->setZ(z);
+}
+
+Quaternion::Quaternion(Point axis, double angle)
+{
+    this->setW(1           * cos(angle / 2));
+    this->setX(axis.getX() * sin(angle / 2));
+    this->setY(axis.getY() * sin(angle / 2));
+    this->setZ(axis.getZ() * sin(angle / 2));
+}
+
+Quaternion::Quaternion(Point point)
+{
+    this->setW(0);
+    this->setX(point.getX());
+    this->setY(point.getY());
+    this->setZ(point.getZ());
 }
 
 Quaternion::~Quaternion()
@@ -91,8 +98,7 @@ Quaternion Quaternion::inverse()
     return Quaternion(conj.w/norm2, conj.x/norm2, conj.y/norm2, conj.z/norm2);
 }
 
-
-Quaternion* Quaternion::operator =(const Quaternion &q)
+Quaternion* Quaternion::operator=(const Quaternion &q)
 {
     this->setW(q.w);
     this->setX(q.x);
@@ -101,7 +107,7 @@ Quaternion* Quaternion::operator =(const Quaternion &q)
     return this;
 }
 
-Quaternion* Quaternion::operator +(const Quaternion &q)
+Quaternion* Quaternion::operator+(const Quaternion &q)
 {
     this->setW(this->w + q.w);
     this->setX(this->x + q.x);
@@ -110,7 +116,7 @@ Quaternion* Quaternion::operator +(const Quaternion &q)
     return this;
 }
 
-Quaternion* Quaternion::operator -(const Quaternion &q)
+Quaternion* Quaternion::operator-(const Quaternion &q)
 {
     this->setW(this->w - q.w);
     this->setX(this->x - q.x);
@@ -119,18 +125,7 @@ Quaternion* Quaternion::operator -(const Quaternion &q)
     return this;
 }
 
-/**********************************************
- * t is the product of two quaternions r and s
- * 
- * t = rs
- * rs != sr
- * 
- * t0 = (r0s0 − r1s1 − r2s2 − r3s3)
- * t1 = (r0s1 + r1s0 − r2s3 + r3s2)
- * t2 = (r0s2 + r1s3 + r2s0 − r3s1)
- * t3 = (r0s3 − r1s2 + r2s1 + r3s0)
- **********************************************/
-Quaternion Quaternion::operator *(const Quaternion &q)
+Quaternion Quaternion::operator*(const Quaternion &q)
 {
     Quaternion product = Quaternion(this->w*q.w - this->x*q.x - this->y*q.y - this->z*q.z,
                                     this->w*q.x + this->x*q.w + this->y*q.z - this->z*q.y,

@@ -6,13 +6,12 @@
 #include "../include/Point.h"
 #include <cmath>
 #include <vector>
-#include <string>
 
 class Shape3D
 {
 public:
 
-    Shape3D(std::string platonicSolid);
+    Shape3D(int platonicSolidID, Point ORIGIN);
     Shape3D();
     ~Shape3D();
 
@@ -22,10 +21,8 @@ public:
     void removeVertex(int index);
     void removeEdge(int index);
 
-    void draw(SDL_Renderer* renderer, Point ORIGIN);
-    void rotate(Point axis, double angle);
-
-private:
+    int  numberOfEdges();
+    int  numberOfVertices();
 
     std::vector<Point> vertices;
     std::vector<std::pair<int, int>> edges;
