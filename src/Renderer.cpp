@@ -145,7 +145,7 @@ void Renderer::handleInput()
 	if (isLocalrotation)
 		rotateShapesLocal(axisOfRotation, 0.1);
 	else
-		rotateShapesAboutPoint(ORIGIN, axisOfRotation, 0.1);
+		rotateShapesAboutPoint(Point(0, 0, 0), axisOfRotation, 0.1);
 }
 
 void Renderer::handleEvents()
