@@ -14,21 +14,16 @@ public:
 
     void  setShapes();
 
-
     Point rotatePoint(Point point, Point axis, double angle);
     Point rotatePointAboutAnother(Point point, Point centerOfRotation, Point axis, double angle);
-
     void  rotateShapeLocal(Shape3D &shape, Point axis, double angle);
-    void  rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, double angle);
-
     void  rotateShapesLocal(Point axis, double angle);
+    void  rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, double angle);
     void  rotateShapesAboutPoint(Point centerOfRotation, Point axis, double angle);
-
 
     void  drawLine(Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
     void  drawShapes();
-
 
     void  clearScreen();
     void  handleEvents();
@@ -45,7 +40,6 @@ private:
     bool          isRunning;
 
     Point         ORIGIN;
-    Point         point;
     Shape3D       shapes[5];
 };
 

@@ -20,11 +20,11 @@ Renderer::~Renderer()
 
 void Renderer::setShapes() // sets shapes to the platonic solids
 {
-	shapes[0] = Shape3D(0, ORIGIN); // Cube
-	shapes[1] = Shape3D(1, ORIGIN); // Tetrahedron
-	shapes[2] = Shape3D(2, ORIGIN); // Octahedron
-	shapes[3] = Shape3D(3, ORIGIN); // Dodecahedron
-	shapes[4] = Shape3D(4, ORIGIN); // Icosahedron
+	shapes[0] = Shape3D(0); // Cube
+	shapes[1] = Shape3D(1); // Tetrahedron
+	shapes[2] = Shape3D(2); // Octahedron
+	shapes[3] = Shape3D(3); // Dodecahedron
+	shapes[4] = Shape3D(4); // Icosahedron
 }
 
 Point Renderer::rotatePoint(Point point, Point axis, double angle)
@@ -165,7 +165,6 @@ void Renderer::run()
     while (isRunning)
 	{
 		Uint64 startTime = SDL_GetPerformanceCounter();
-
 		clearScreen();
 
 		drawShapes();

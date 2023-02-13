@@ -5,9 +5,9 @@ Shape3D::Shape3D()
 {
 }
 
-Shape3D::Shape3D(int platonicSolidID, Point ORIGIN)
+Shape3D::Shape3D(int platonicSolidID)
 {
-    const double SCALE = 50;
+    double SCALE = 50;
     const double PHI   = (1 + sqrt(5)) / 2;
     if (platonicSolidID == 0) // Cube
     {
@@ -29,6 +29,7 @@ Shape3D::Shape3D(int platonicSolidID, Point ORIGIN)
     }
     else if (platonicSolidID == 2) // Octahedron
     {
+        SCALE *= 1.25;    
         vertices = {Point(SCALE, 0, 0),  Point(-SCALE, 0, 0), Point(0, SCALE, 0),
                     Point(0, -SCALE, 0), Point(0, 0, SCALE),  Point(0, 0, -SCALE)};
         edges    = {{0, 2}, {0, 3}, {0, 4}, {0, 5}, {1, 2}, {1, 3},
@@ -39,6 +40,7 @@ Shape3D::Shape3D(int platonicSolidID, Point ORIGIN)
     }
     else if (platonicSolidID == 3) // Dodecahedron
     {
+        SCALE *= .75;    
         vertices = {Point(SCALE, SCALE, SCALE),     Point(SCALE, SCALE, -SCALE),     Point(SCALE, -SCALE, SCALE),      Point(SCALE, -SCALE, -SCALE),
                     Point(-SCALE, SCALE, SCALE),    Point(-SCALE, SCALE, -SCALE),    Point(-SCALE, -SCALE, SCALE),     Point(-SCALE, -SCALE, -SCALE),
                     Point(0, SCALE/PHI, SCALE*PHI), Point(0, SCALE/PHI, -SCALE*PHI), Point(0, -SCALE /PHI, SCALE*PHI), Point(0, -SCALE/PHI, -SCALE*PHI),
@@ -55,6 +57,7 @@ Shape3D::Shape3D(int platonicSolidID, Point ORIGIN)
     }
     else if (platonicSolidID == 4) // Icosahedron
     {
+        SCALE *= .75;    
         vertices = {Point(0, SCALE, SCALE*PHI), Point(0, SCALE, -SCALE*PHI), Point(0, -SCALE, SCALE*PHI), Point(0, -SCALE, -SCALE*PHI),
                     Point(SCALE, SCALE*PHI, 0), Point(SCALE, -SCALE*PHI, 0), Point(-SCALE, SCALE*PHI, 0), Point(-SCALE, -SCALE*PHI, 0),
                     Point(SCALE*PHI, 0, SCALE), Point(SCALE*PHI, 0, -SCALE), Point(-SCALE*PHI, 0, SCALE), Point(-SCALE*PHI, 0, -SCALE)};

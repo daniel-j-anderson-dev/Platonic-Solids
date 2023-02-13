@@ -11,7 +11,7 @@ class Shape3D
 {
 public:
 
-    Shape3D(int platonicSolidID, Point ORIGIN);
+    Shape3D(int platonicSolidID);
     Shape3D();
     ~Shape3D();
 
