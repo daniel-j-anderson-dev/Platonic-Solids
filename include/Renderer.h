@@ -12,6 +12,7 @@ struct rgbaColor
 	int blue;
 	int alpha;
 };
+
 class Renderer
 {
 public:
@@ -48,17 +49,20 @@ public:
     
 private:
 
-    SDL_Window*   window;
-    SDL_Renderer* renderer2D;
+    // TODO: take these out of this class
     SDL_Event     event;
     bool          isRunning;
     bool          isLocalRotation;
     Uint64        startTime;
     Uint64        endTime;
+    Shape3D       shapes[5];
 
+    // you can stay :)
+    SDL_Window*   window;
+    SDL_Renderer* renderer2D;
+    SDL_Texture*  background;
     Point         axisOfRotation;
     Point         ORIGIN;
-    Shape3D       shapes[5];
     Shape3D       axes[3];
 };
 

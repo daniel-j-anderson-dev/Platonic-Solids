@@ -3,9 +3,10 @@
 Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {    
     SDL_Init(SDL_INIT_VIDEO);
-    window        = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    renderer2D    = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
+    window     = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    renderer2D = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	background = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("background.bmp"));
+	ORIGIN          = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
 	isLocalRotation = true;
 	setAxes();
 
@@ -17,17 +18,17 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 void Renderer::setAxes()
 {
 	double length = 0;
-	if (ORIGIN.getX() > ORIGIN.getY())
+	if (ORIGIN.x > ORIGIN.y)
 	{
-		length = ORIGIN.getX() * 2;
+		length = ORIGIN.x * 2;
 	}
 	else
 	{
-		length = ORIGIN.getY() * 2;
+		length = ORIGIN.y * 2;
 	}
-	std::vector<Point> xAxisVertices = {Point(-length, 0, 0), Point(0, 0, 0), Point(length, 0, 0)};
-	std::vector<Point> yAxisVertices = {Point(0, -length, 0), Point(0, 0, 0), Point(0, length, 0)};
-	std::vector<Point> zAxisVertices = {Point(0, 0, -length), Point(0, 0, 0), Point(0, 0, length)};
+	std::vector<Point> xAxisVertices = {{-length, 0, 0}, {0, 0, 0}, {length, 0, 0}};
+	std::vector<Point> yAxisVertices = {{0, -length, 0}, {0, 0, 0}, {0, length, 0}};
+	std::vector<Point> zAxisVertices = {{0, 0, -length}, {0, 0, 0}, {0, 0, length}};
 	std::vector<std::pair<int, int>> axisEdges = {{0, 1}, {1, 2}};
 	axes[0].vertices = xAxisVertices;
 	axes[1].vertices = yAxisVertices;
@@ -39,21 +40,16 @@ void Renderer::setAxes()
 
 void Renderer::drawAxes()
 {
-	rgbaColor color = {0, 0, 0, 255};
 	for (int i = 0; i < 3; i++)
 	{
-		switch (i)
-		{
-			case 0:
-				color = {255, 0, 0, 255};
-				break;
-			case 1:		
-				color = {0, 255, 0, 255};
-				break;
-			case 2:		
-				color = {0, 0, 255, 255};
-				break;
-		}
+		rgbaColor color = {0, 0, 0, 0};
+		if (i == 0)
+			color = {255, 0, 0, 255};
+		else if (i == 1)		
+			color = {0, 255, 0, 255};
+		else		
+			color = {0, 0, 255, 255};
+
 		
 		for (auto &edge : axes[i].edges)
 		{
@@ -65,18 +61,18 @@ void Renderer::drawAxes()
 
 void Renderer::drawLine(rgbaColor color, Point startPoint, Point endPoint)
 {
-	startPoint = startPoint + ORIGIN;
-	endPoint   = endPoint   + ORIGIN;
+	startPoint = {startPoint.x + ORIGIN.x, startPoint.y + ORIGIN.y, startPoint.z + ORIGIN.z};
+	endPoint   = {endPoint.x   + ORIGIN.x, endPoint.y   + ORIGIN.y, endPoint.z   + ORIGIN.z};
 	SDL_SetRenderDrawColor(renderer2D, color.red, color.blue, color.green, color.alpha);
-	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+	SDL_RenderDrawLine(renderer2D, startPoint.x, startPoint.y, endPoint.x, endPoint.y);
 }
 
 void Renderer::drawShape(Shape3D shape)
 {
-	rgbaColor black = {0, 0, 0, 255};
+	rgbaColor white = {255, 255, 255, 255};
 	for (auto &edge : shape.edges)
 	{
-		drawLine(black, shape.vertices[edge.first], shape.vertices[edge.second]);
+		drawLine(white, shape.vertices[edge.first], shape.vertices[edge.second]);
 	}
 }
 
@@ -93,7 +89,8 @@ void Renderer::clearScreen()
 {
 	startTime = SDL_GetPerformanceCounter();
 	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
-	SDL_RenderClear(renderer2D);
+	// SDL_RenderClear(renderer2D);
+	SDL_RenderCopy(renderer2D, background, NULL, NULL);
 }
 
 void Renderer::update()
@@ -114,18 +111,18 @@ Renderer::~Renderer()
 // TODO: put roation functions in Rotator class
 Point Renderer::rotatePoint(Point point, Point axis, double angle)
 {
-    Quaternion rotation      = Quaternion(/*new*/axis, angle);
+    Quaternion rotation      = Quaternion(axis, angle);
     Quaternion original 	 = Quaternion(point);
     Quaternion product  	 = rotation.inverse() * original * rotation;
-    Point 	   rotatedPoint  = Point(product.getX(), product.getY(), product.getZ());
+    Point 	   rotatedPoint  = {product.getX(), product.getY(), product.getZ()};
     return rotatedPoint;
 }
 
 Point Renderer::rotatePointAboutAnother(Point point, Point centerOfRotation, Point axis, double angle)
 {
-	Point difference   = point - centerOfRotation;
+	Point difference   = {point.x - centerOfRotation.x, point.y - centerOfRotation.y, point.z - centerOfRotation.z};
 	Point rotatedPoint = rotatePoint(difference, axis, angle);
-	Point sum		   = rotatedPoint + centerOfRotation;
+	Point sum		   = {rotatedPoint.x + centerOfRotation.x, rotatedPoint.y + centerOfRotation.y, rotatedPoint.z + centerOfRotation.z};
 	return sum;
 }
 
@@ -173,7 +170,7 @@ void Renderer::rotateShapesAboutPoint(Shape3D (&shapes)[size], Point centerOfRot
 // TODO: put handleInput, handlEvent and setShapes in main
 void Renderer::handleInput(const Uint8* keys)
 {
-	axisOfRotation  = Point(0, 0, 0);
+	axisOfRotation  = {0, 0, 0};
 	isLocalRotation = true;
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
@@ -186,19 +183,23 @@ void Renderer::handleInput(const Uint8* keys)
 		isLocalRotation = false;
 
 	if (keys[SDL_SCANCODE_S])
-		axisOfRotation.incX();
+		axisOfRotation.x++;
 	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.decX();
+		axisOfRotation.x--;
 	if (keys[SDL_SCANCODE_D])
-		axisOfRotation.incY();
+		axisOfRotation.y++;
 	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.decY();
+		axisOfRotation.y--;
 	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.incZ();
+		axisOfRotation.z++;
 	if (keys[SDL_SCANCODE_Q])
-		axisOfRotation.decZ();
+		axisOfRotation.z--;
 	if (keys[SDL_SCANCODE_SPACE])
-		axisOfRotation.incXYZ();
+	{
+		axisOfRotation.x++;
+		axisOfRotation.y++;
+		axisOfRotation.z++;
+	}
 }
 
 void Renderer::handleEvents(SDL_Event event)
@@ -247,8 +248,8 @@ void Renderer::run()
 		}
 		else
 		{
-			rotateShapesAboutPoint(shapes, Point(0, 0, 0), axisOfRotation, 0.01);
-			rotateShapesAboutPoint(axes,   Point(0, 0, 0), axisOfRotation, 0.01);
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+			rotateShapesAboutPoint(axes,   {0, 0, 0}, axisOfRotation, 0.01);
 		}
 
 		update();
