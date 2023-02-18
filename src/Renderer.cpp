@@ -30,8 +30,8 @@ void Renderer::drawShape(Shape3D shape)
 	}
 }
 
-template <int length>
-void Renderer::drawShapes(Shape3D (&shapes)[length])
+template <int size>
+void Renderer::drawShapes(Shape3D (&shapes)[size])
 {
 	for (auto &shape : shapes)
 	{
@@ -122,21 +122,19 @@ void Renderer::handleInput(const Uint8* keys)
 		isLocalRotation = false;
 
 	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.setX(axisOfRotation.getX() + 1);
+		axisOfRotation.incX();
 	if (keys[SDL_SCANCODE_D])
-		axisOfRotation.setX(axisOfRotation.getX() + -1);
+		axisOfRotation.decX();
 	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.setY(axisOfRotation.getY() + 1);
+		axisOfRotation.incY();
 	if (keys[SDL_SCANCODE_S])
-		axisOfRotation.setY(axisOfRotation.getY() + -1);
+		axisOfRotation.decY();
 	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.setZ(axisOfRotation.getZ() + 1);
+		axisOfRotation.incZ();
 	if (keys[SDL_SCANCODE_Q])
-		axisOfRotation.setZ(axisOfRotation.getZ() + -1);
+		axisOfRotation.decZ();
 	if (keys[SDL_SCANCODE_SPACE])
-		axisOfRotation.setXYZ(axisOfRotation.getX() + 1, 
-							  axisOfRotation.getY() + 1,
-							  axisOfRotation.getZ() + 1);
+		axisOfRotation.incXYZ();
 }
 
 void Renderer::handleEvents(SDL_Event event)
@@ -150,10 +148,6 @@ void Renderer::handleEvents(SDL_Event event)
 				break;
 
 			case SDL_KEYUP:
-				if (!event.key.repeat)
-				{
-					this->axisOfRotation = Point(0, 0, 0);
-				}
 				handleInput(SDL_GetKeyboardState(NULL));
 				break;
 		}

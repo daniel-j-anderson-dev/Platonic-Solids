@@ -23,8 +23,8 @@ public:
 
     void  drawLine(Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
-    template <int length>
-    void  drawShapes(Shape3D (&shapes)[length]);
+    template <int size>
+    void  drawShapes(Shape3D (&shapes)[size]);
 
     void  clearScreen();
     void  handleEvents(SDL_Event event);

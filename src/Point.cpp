@@ -86,3 +86,43 @@ Point Point::operator-(Point point)
     this->z -= point.getZ();
     return this;
 }
+
+void Point::incX()
+{
+    this->setX(this->getX() + 1);
+}
+
+void Point::incY()
+{
+    this->setY(this->getY() + 1);
+}
+
+void Point::incZ()
+{
+    this->setZ(this->getZ() + 1);
+}
+
+void Point::decX()
+{
+    this->setX(this->getX() - 1);
+}
+
+void Point::decY()
+{
+    this->setY(this->getY() - 1);
+}
+
+void Point::decZ()
+{
+    this->setZ(this->getZ() - 1);
+}
+
+void Point::incXYZ()
+{
+    this->setXYZ(this->getX() + 1, this->getY() + 1, this->getZ() + 1);
+}
+
+void Point::decXYZ()
+{
+    this->setXYZ(this->getX() - 1, this->getY() - 1, this->getZ() - 1);
+}
