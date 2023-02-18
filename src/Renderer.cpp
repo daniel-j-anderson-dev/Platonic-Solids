@@ -2,19 +2,19 @@
 
 Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {    
-    ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
-    isRunning     = true;
-	keys          = SDL_GetKeyboardState(NULL);
     SDL_Init(SDL_INIT_VIDEO);
     window        = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    screen        = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer2D    = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
+    isRunning     = true;
+	keys          = SDL_GetKeyboardState(NULL);
 	setShapes();
 }
 
 Renderer::~Renderer()
 {
     SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(screen);
+	SDL_DestroyRenderer(renderer2D);
 	SDL_Quit();
 }
 
@@ -87,11 +87,11 @@ void Renderer::drawLine(Point startPoint, Point endPoint)
 {
 	startPoint = startPoint + ORIGIN;
 	endPoint   = endPoint   + ORIGIN;
-	SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
-	SDL_RenderDrawLine(screen, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-	SDL_RenderDrawPoint(screen, startPoint.getX(), startPoint.getY());
-	SDL_RenderDrawPoint(screen, endPoint.getX(), endPoint.getY());
-	SDL_RenderPresent(screen);
+	SDL_SetRenderDrawColor(renderer2D, 0, 0, 0, 255);
+	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+	SDL_RenderDrawPoint(renderer2D, startPoint.getX(), startPoint.getY());
+	SDL_RenderDrawPoint(renderer2D, endPoint.getX(), endPoint.getY());
+	SDL_RenderPresent(renderer2D);
 }
 
 void Renderer::drawShape(Shape3D shape)
@@ -112,8 +112,8 @@ void Renderer::drawShapes()
 
 void Renderer::clearScreen()
 {
-	SDL_SetRenderDrawColor(screen, 255, 255, 255, 255);
-	SDL_RenderClear(screen);
+	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
+	SDL_RenderClear(renderer2D);
 }
 
 void Renderer::handleInput()

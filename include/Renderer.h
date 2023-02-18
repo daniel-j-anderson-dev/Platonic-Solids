@@ -34,7 +34,7 @@ public:
 private:
 
     SDL_Window*   window;
-    SDL_Renderer* screen;
+    SDL_Renderer* renderer2D;
     SDL_Event     event;
     const Uint8*  keys;
     bool          isRunning;
