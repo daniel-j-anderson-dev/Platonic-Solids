@@ -24,8 +24,10 @@ public:
     void  rotateShapesAboutPoint(Shape3D (&shapes)[size],Point centerOfRotation, Point axis, double angle);
 
     void setAxes();
+    void drawAxes();
+    // void drawDashedLine(Point color, Point startPoint, Point endPoint, int dashLength);
 
-    void  drawLine(Point startPoint, Point endPoint);
+    void  drawLine(Point color, Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
     template <int size>
     void  drawShapes(Shape3D (&shapes)[size]);

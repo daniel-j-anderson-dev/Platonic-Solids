@@ -37,20 +37,46 @@ void Renderer::setAxes()
 	axes[2].edges	 = axisEdges;
 }
 
-void Renderer::drawLine(Point startPoint, Point endPoint)
+void Renderer::drawAxes()
+{
+	Point color = Point(0, 0, 0);
+	for (int i = 0; i < 3; i++)
+	{
+		switch (i)
+		{
+			case 0:
+				color = Point(255, 0, 0);
+				break;
+			case 1:		
+				color = Point(0, 255, 0);
+				break;
+			case 2:		
+				color = Point(0, 0, 255);
+				break;
+		}
+		
+		for (auto &edge : axes[i].edges)
+		{
+			drawLine(color, axes[i].vertices[edge.first], axes[i].vertices[edge.second]);
+		}
+	}
+}
+
+void Renderer::drawLine(Point color, Point startPoint, Point endPoint)
 {
 	startPoint = startPoint + ORIGIN;
 	endPoint   = endPoint   + ORIGIN;
-	SDL_SetRenderDrawColor(renderer2D, 0, 0, 0, 255); // red, green, blue, alpha
+	SDL_SetRenderDrawColor(renderer2D, color.getX(), color.getY(), color.getZ(), 255); // red, green, blue, alpha
 	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
 	SDL_RenderPresent(renderer2D);
 }
 
 void Renderer::drawShape(Shape3D shape)
 {
+	Point black = Point(0, 0, 0);
 	for (auto &edge : shape.edges)
 	{
-		drawLine(shape.vertices[edge.first], shape.vertices[edge.second]);
+		drawLine(black, shape.vertices[edge.first], shape.vertices[edge.second]);
 	}
 }
 
@@ -143,17 +169,20 @@ void Renderer::handleInput(const Uint8* keys)
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
 	if (keys[SDL_SCANCODE_0])
-		setShapes();
+		{
+			setShapes();
+			setAxes();
+		}
 	if (keys[SDL_SCANCODE_LSHIFT])
 		isLocalRotation = false;
 
-	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.incX();
-	if (keys[SDL_SCANCODE_D])
-		axisOfRotation.decX();
-	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.incY();
 	if (keys[SDL_SCANCODE_S])
+		axisOfRotation.incX();
+	if (keys[SDL_SCANCODE_W])
+		axisOfRotation.decX();
+	if (keys[SDL_SCANCODE_D])
+		axisOfRotation.incY();
+	if (keys[SDL_SCANCODE_A])
 		axisOfRotation.decY();
 	if (keys[SDL_SCANCODE_E])
 		axisOfRotation.incZ();
@@ -199,6 +228,8 @@ void Renderer::run()
 		clearScreen();
 
 		drawShapes(shapes);
+
+		drawAxes();
 
 		handleEvents(event);
 
