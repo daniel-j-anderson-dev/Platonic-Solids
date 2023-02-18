@@ -95,34 +95,3 @@ Shape3D::Shape3D(int platonicSolidID)
 Shape3D::~Shape3D()
 {
 }
-
-void Shape3D::addVertex(Point vertex)
-{
-    vertices.push_back(vertex);
-}
-
-void Shape3D::addEdge(int firstVertexIndex, int secondVertexIndex)
-{
-    std::pair edge = std::make_pair(firstVertexIndex, secondVertexIndex);
-    edges.push_back(edge);
-}
-
-void Shape3D::removeVertex(int index)
-{
-    vertices.erase(vertices.begin() + index);
-}
-
-void Shape3D::removeEdge(int index)
-{
-    edges.erase(edges.begin() + index);
-}
-
-int Shape3D::numberOfEdges()
-{
-    return edges.size();
-}
-
-int Shape3D::numberOfVertices()
-{
-    return vertices.size();
-}

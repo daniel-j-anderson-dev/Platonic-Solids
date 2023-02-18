@@ -14,15 +14,6 @@ public:
     Shape3D();
     ~Shape3D();
 
-    void addVertex(Point vertex);
-    void addEdge(int firstVertexIndex, int secondVertexIndex);
-
-    void removeVertex(int index);
-    void removeEdge(int index);
-
-    int  numberOfEdges();
-    int  numberOfVertices();
-
     std::vector<Point> vertices;
     std::vector<std::pair<int, int>> edges;
     Point position;
