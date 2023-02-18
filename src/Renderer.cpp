@@ -8,6 +8,8 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 	background = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("background.bmp"));
 	ORIGIN          = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
 	isLocalRotation = true;
+	axisOfRotation    = {0, 0, 0};
+	axisOfTranslation = {0, 0, 0};
 	setAxes();
 
 	// TODO: remove these members
@@ -45,9 +47,9 @@ void Renderer::drawAxes()
 		rgbaColor color = {0, 0, 0, 0};
 		if (i == 0)
 			color = {255, 0, 0, 255};
-		else if (i == 1)		
+		else if (i == 2)		
 			color = {0, 255, 0, 255};
-		else		
+		else if (i == 1)	
 			color = {0, 0, 255, 255};
 
 		
@@ -87,8 +89,8 @@ void Renderer::drawShapes(Shape3D (&shapes)[size])
 
 void Renderer::clearScreen()
 {
-	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
 	SDL_RenderCopy(renderer2D, background, NULL, NULL);
+	drawAxes();
 }
 
 void Renderer::update()
@@ -106,7 +108,7 @@ Renderer::~Renderer()
 	SDL_Quit();
 }
 
-// TODO: put rotation functions in Rotator class
+// TODO: put transformation functions in Transformer class
 Point Renderer::rotatePoint(Point point, Point axis, double angle)
 {
     Quaternion rotation      = Quaternion(axis, angle);
@@ -165,20 +167,56 @@ void Renderer::rotateShapesAboutPoint(Shape3D (&shapes)[size], Point centerOfRot
 	}
 }
 
+void Renderer::translatePoint(Point &point, Point axis, double distance)
+{
+	if (axis.x == 0 && axis.y == 0 && axis.z ==0)
+		return;
+	double norm 		  = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
+	Point newAxis  		  = {distance*(axis.x/norm), distance*(axis.y/norm), distance*(axis.z/norm)};
+	point = {point.x + newAxis.x, point.y + newAxis.y, point.z + newAxis.z};
+}
+
+void Renderer::tanslateShape(Shape3D &shape, Point axis, double distance)
+{
+	for (auto &vertex : shape.vertices)
+	{
+		translatePoint(vertex, axis, distance);
+	}
+	translatePoint(shape.position, axis, distance);
+}
+
+template <int size>
+void Renderer::translateShapes(Shape3D (&shapes)[size], Point axis, double distance)
+{
+	for (auto &shape : shapes)
+	{
+		tanslateShape(shape, axis, distance);
+	}
+}
+
 // TODO: put handleInput, handlEvent and setShapes in main
 void Renderer::handleInput(const Uint8* keys)
 {
-	axisOfRotation  = {0, 0, 0};
+	axisOfRotation    = {0, 0, 0};
+	axisOfTranslation = {0, 0, 0};
 	isLocalRotation = true;
+	isWorldRotation = false;
+
+	Point xAxis = axes[0].vertices[2];
+	Point yAxis = axes[1].vertices[2];
+	Point zAxis = axes[2].vertices[2];
+
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
-	if (keys[SDL_SCANCODE_0])
-		{
-			setShapes();
-			setAxes();
-		}
 	if (keys[SDL_SCANCODE_LSHIFT])
 		isLocalRotation = false;
+	if (keys[SDL_SCANCODE_LCTRL])
+		isWorldRotation = true;
+	if (keys[SDL_SCANCODE_0])
+	{
+		setShapes();
+		setAxes();
+	}
 
 	if (keys[SDL_SCANCODE_S])
 		axisOfRotation.x++;
@@ -197,6 +235,43 @@ void Renderer::handleInput(const Uint8* keys)
 		axisOfRotation.x++;
 		axisOfRotation.y++;
 		axisOfRotation.z++;
+	}
+
+	if (keys[SDL_SCANCODE_RIGHT])
+	{
+		axisOfTranslation.x += xAxis.x;
+		axisOfTranslation.y += xAxis.y;
+		axisOfTranslation.z += xAxis.z;
+	}
+	if (keys[SDL_SCANCODE_LEFT])
+	{
+		axisOfTranslation.x -= xAxis.x;
+		axisOfTranslation.x -= xAxis.y;
+		axisOfTranslation.x -= xAxis.z;
+	}
+	if (keys[SDL_SCANCODE_DOWN])
+	{
+		axisOfTranslation.x += yAxis.x;
+		axisOfTranslation.y += yAxis.y;
+		axisOfTranslation.z += yAxis.z;
+	}
+	if (keys[SDL_SCANCODE_UP])
+	{
+		axisOfTranslation.x -= yAxis.x;
+		axisOfTranslation.y -= yAxis.y;
+		axisOfTranslation.z -= yAxis.z;
+	}
+	if (keys[SDL_SCANCODE_PAGEUP])
+	{
+		axisOfTranslation.x += zAxis.x;
+		axisOfTranslation.y += zAxis.y;
+		axisOfTranslation.z += zAxis.z;
+	}
+	if (keys[SDL_SCANCODE_PAGEDOWN])
+	{
+		axisOfTranslation.x -= zAxis.x;
+		axisOfTranslation.y -= zAxis.y;
+		axisOfTranslation.z -= zAxis.z;
 	}
 }
 
@@ -237,20 +312,23 @@ void Renderer::run()
 
 		drawShapes(shapes);
 
-		drawAxes();
-
 		handleEvents(event);
 
 		// Rotator.rotateShapes()
-		if (isLocalRotation)
+		if (isLocalRotation && !isWorldRotation)
 		{
 			rotateShapesLocal(shapes, axisOfRotation, 0.01);
 		}
 		else
 		{
 			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+		}
+		if (isWorldRotation)
+		{
 			rotateShapesAboutPoint(axes,   {0, 0, 0}, axisOfRotation, 0.01);
 		}
+
+		translateShapes(shapes, axisOfTranslation, 1);
 
 		update();
 	}
