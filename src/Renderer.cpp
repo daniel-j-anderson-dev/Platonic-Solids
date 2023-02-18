@@ -8,7 +8,7 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 	keys          = SDL_GetKeyboardState(NULL);
 	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
     isRunning     = true;
-	isLocalrotation = true;
+	isLocalRotation = true;
 	setShapes();
 }
 
@@ -50,15 +50,7 @@ Renderer::~Renderer()
 	SDL_Quit();
 }
 
-void Renderer::setShapes() // sets shapes to the platonic solids
-{
-	shapes[0] = Shape3D(0); // Cube
-	shapes[1] = Shape3D(1); // Tetrahedron
-	shapes[2] = Shape3D(2); // Octahedron
-	shapes[3] = Shape3D(3); // Dodecahedron
-	shapes[4] = Shape3D(4); // Icosahedron
-}
-
+// TODO: put roation functions in Rotator class
 Point Renderer::rotatePoint(Point point, Point axis, double angle)
 {
     Quaternion rotation      = Quaternion(/*new*/axis, angle);
@@ -115,16 +107,17 @@ void Renderer::rotateShapesAboutPoint(Point centerOfRotation, Point axis, double
 	}
 }
 
-Point Renderer::getAxisOfRotation(const Uint8* keys)
+// TODO: put handleInput, handlEvent and setShapes in main
+void Renderer::handleInput(const Uint8* keys)
 {
-	axisOfRotation = Point(0, 0, 0);
-	isLocalrotation = true;
+	axisOfRotation  = Point(0, 0, 0);
+	isLocalRotation = true;
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
 	if (keys[SDL_SCANCODE_0])
 		setShapes();
 	if (keys[SDL_SCANCODE_LSHIFT])
-		isLocalrotation = false;
+		isLocalRotation = false;
 
 	if (keys[SDL_SCANCODE_A])
 		axisOfRotation.setX(axisOfRotation.getX() + 1);
@@ -142,8 +135,6 @@ Point Renderer::getAxisOfRotation(const Uint8* keys)
 		axisOfRotation.setXYZ(axisOfRotation.getX() + 1, 
 							  axisOfRotation.getY() + 1,
 							  axisOfRotation.getZ() + 1);
-	
-	return axisOfRotation;
 }
 
 void Renderer::handleEvents(SDL_Event event)
@@ -153,7 +144,7 @@ void Renderer::handleEvents(SDL_Event event)
 		switch (event.type)
 		{
 			case SDL_KEYDOWN:
-				this->axisOfRotation = getAxisOfRotation(SDL_GetKeyboardState(NULL));
+				handleInput(SDL_GetKeyboardState(NULL));
 				break;
 
 			case SDL_KEYUP:
@@ -161,10 +152,20 @@ void Renderer::handleEvents(SDL_Event event)
 				{
 					this->axisOfRotation = Point(0, 0, 0);
 				}
-				this->axisOfRotation = getAxisOfRotation(SDL_GetKeyboardState(NULL));
+				handleInput(SDL_GetKeyboardState(NULL));
 				break;
 		}
 	}
+}
+
+// TODO: put vertex and edge data for each shape here
+void Renderer::setShapes() // sets shapes to the platonic solids
+{
+	shapes[0] = Shape3D(0); // Cube
+	shapes[1] = Shape3D(1); // Tetrahedron
+	shapes[2] = Shape3D(2); // Octahedron
+	shapes[3] = Shape3D(3); // Dodecahedron
+	shapes[4] = Shape3D(4); // Icosahedron
 }
 
 void Renderer::run()
@@ -179,13 +180,13 @@ void Renderer::run()
 
 		handleEvents(event);
 
-		if (isLocalrotation)
+		if (isLocalRotation)
 		{
-			rotateShapesLocal(this->axisOfRotation, 0.1);
+			rotateShapesLocal(axisOfRotation, 0.1);
 		}
 		else
 		{
-			rotateShapesAboutPoint(Point(0, 0, 0), this->axisOfRotation, 0.1);
+			rotateShapesAboutPoint(Point(0, 0, 0), axisOfRotation, 0.1);
 		}
 
 

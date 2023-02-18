@@ -27,7 +27,7 @@ public:
 
     void  clearScreen();
     void  handleEvents(SDL_Event event);
-    Point getAxisOfRotation(const Uint8* keys);
+    void  handleInput(const Uint8* keys);
 
     void  run();
     
@@ -38,7 +38,7 @@ private:
     SDL_Event     event;
     const Uint8*  keys;
     bool          isRunning;
-    bool          isLocalrotation;
+    bool          isLocalRotation;
 
     Point         axisOfRotation;
     Point         ORIGIN;
