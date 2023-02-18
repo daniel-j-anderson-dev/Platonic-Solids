@@ -8,65 +8,41 @@ Allow control position of shape
 Allow control orientation of shape
 Allow for control to end execution
 
-* = Classes
-~ = Functions
-' = Variables
-? = Question/Task
-# = Comment
-
-Classes
-    Model
-        *Camera
-            # Some SDL class that interacts with SDL_Renderer,
-            # We will investigate this with tutorials later.
-
-            'Quaternion position
-            'Quaternion orientation
-            'double distToViewport
-            # size of view port is 1920x1080
-
-            'double fieldOfViewVertical
-            'double nearViewingPlane
-            'double farViewingPlane
-            # These will represent the frustum of the camera
+Model
+    POD's
+    helper method
+View
+    displays model in some way
+        renderer
+Controller 
+    modifies model
 
 
-            ~getPosition
-            ~setPosition
-            ~getOrientation
-            ~setOrientation
 
-        *Shape3D
-            'vector<Quaternion> vertices
-            'vector<pair<int, int>> edges
-
-            ~addVertex
-            ~addEdge
-            ~removeVertex
-            ~removeEdge
-
-            ~getVertices
-            ~getEdges
-            ~setVertices
-            ~setEdges
-
-        *Quaternion
-            'double w
-            'double x
-            'double y
-            'double z
-
-    View
-        *SDL_Window
-        *SDL_Renderer
-        *Helper Class
-            ~drawLine
-            ~clearScreen
-
-    Controller
-        *Event handler
-            ~ChangeShapeOrientation
-            ~ChangeShapePosition
-            ~ChangeCameraOrientation
-            ~ChangeCameraPosition
-            ~ChangeEndExecution
+Model
+    Quaternion
+    point -> struct
+    color -> struct
+    Shape3D
+View
+    renderer
+        setAxes()
+        drawAxes()
+        drawLine()
+        drawShape()
+        drawShapes()
+        clearScreen()
+        update()
+Controller
+    Rotator
+    EventHandler
+        handleInputs()
+        handleEvents()
+        ** separate function for each event, etc. something of that nature
+    Main
+        ** main logic loop
+        run()
+            Shape3D cube;
+            cube.vertices = some std::vector<Point>;
+            cube.edges = some std::vector<std::pair<int, int>>;
+            etc.

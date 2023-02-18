@@ -87,9 +87,7 @@ void Renderer::drawShapes(Shape3D (&shapes)[size])
 
 void Renderer::clearScreen()
 {
-	startTime = SDL_GetPerformanceCounter();
 	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
-	// SDL_RenderClear(renderer2D);
 	SDL_RenderCopy(renderer2D, background, NULL, NULL);
 }
 
@@ -108,7 +106,7 @@ Renderer::~Renderer()
 	SDL_Quit();
 }
 
-// TODO: put roation functions in Rotator class
+// TODO: put rotation functions in Rotator class
 Point Renderer::rotatePoint(Point point, Point axis, double angle)
 {
     Quaternion rotation      = Quaternion(axis, angle);
@@ -233,6 +231,8 @@ void Renderer::run()
 {
     while (isRunning)
 	{
+		startTime = SDL_GetPerformanceCounter();
+		
 		clearScreen();
 
 		drawShapes(shapes);
