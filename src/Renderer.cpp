@@ -117,6 +117,7 @@ void Renderer::rotateShapesAboutPoint(Point centerOfRotation, Point axis, double
 
 Point Renderer::getAxisOfRotation(const Uint8* keys)
 {
+	axisOfRotation = Point(0, 0, 0);
 	isLocalrotation = true;
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
@@ -126,19 +127,21 @@ Point Renderer::getAxisOfRotation(const Uint8* keys)
 		isLocalrotation = false;
 
 	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.setX( 1);
+		axisOfRotation.setX(axisOfRotation.getX() + 1);
 	if (keys[SDL_SCANCODE_D])
-		axisOfRotation.setX(-1);
+		axisOfRotation.setX(axisOfRotation.getX() + -1);
 	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.setY( 1);
+		axisOfRotation.setY(axisOfRotation.getY() + 1);
 	if (keys[SDL_SCANCODE_S])
-		axisOfRotation.setY(-1);
+		axisOfRotation.setY(axisOfRotation.getY() + -1);
 	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.setZ( 1);
+		axisOfRotation.setZ(axisOfRotation.getZ() + 1);
 	if (keys[SDL_SCANCODE_Q])
-		axisOfRotation.setZ(-1);
+		axisOfRotation.setZ(axisOfRotation.getZ() + -1);
 	if (keys[SDL_SCANCODE_SPACE])
-		axisOfRotation.setXYZ(1, 1, 1);
+		axisOfRotation.setXYZ(axisOfRotation.getX() + 1, 
+							  axisOfRotation.getY() + 1,
+							  axisOfRotation.getZ() + 1);
 	
 	return axisOfRotation;
 }
