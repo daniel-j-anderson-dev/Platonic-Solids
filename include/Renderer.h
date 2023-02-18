@@ -17,9 +17,13 @@ public:
     Point rotatePoint(Point point, Point axis, double angle);
     Point rotatePointAboutAnother(Point point, Point centerOfRotation, Point axis, double angle);
     void  rotateShapeLocal(Shape3D &shape, Point axis, double angle);
-    void  rotateShapesLocal(Point axis, double angle);
+    template <int size>
+    void  rotateShapesLocal(Shape3D (&shapes)[size], Point axis, double angle);
     void  rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, double angle);
-    void  rotateShapesAboutPoint(Point centerOfRotation, Point axis, double angle);
+    template <int size>
+    void  rotateShapesAboutPoint(Shape3D (&shapes)[size],Point centerOfRotation, Point axis, double angle);
+
+    void setAxes();
 
     void  drawLine(Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
@@ -43,6 +47,7 @@ private:
     Point         axisOfRotation;
     Point         ORIGIN;
     Shape3D       shapes[5];
+    Shape3D       axes[3];
 };
 
 #endif

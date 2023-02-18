@@ -15,7 +15,7 @@ Shape3D::Shape3D(int platonicSolidID)
                     Point(-SCALE, SCALE, SCALE), Point(-SCALE, SCALE, -SCALE), Point(-SCALE, -SCALE, SCALE), Point(-SCALE, -SCALE, -SCALE)};
         edges    = {{0, 1}, {0, 2}, {0, 4}, {1, 3}, {1, 5}, {2, 3},
                     {2, 6}, {3, 7}, {4, 5}, {4, 6}, {5, 7}, {6, 7}};
-        position.setXYZ(0, 0, 0);
+        position.setXYZ(0, 0, 100);
         for (auto& vertex : vertices)
             vertex = vertex + position;
     }
@@ -23,7 +23,7 @@ Shape3D::Shape3D(int platonicSolidID)
     {
         vertices = {Point(SCALE, SCALE, SCALE), Point(-SCALE, -SCALE, SCALE), Point(-SCALE, SCALE, -SCALE), Point(SCALE, -SCALE, -SCALE)};
         edges    = {{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}};
-        position.setXYZ(200, 200, 0);
+        position.setXYZ(200, 200, 100);
         for (auto& vertex : vertices)
             vertex = vertex + position;
     }
@@ -34,7 +34,7 @@ Shape3D::Shape3D(int platonicSolidID)
                     Point(0, -SCALE, 0), Point(0, 0, SCALE),  Point(0, 0, -SCALE)};
         edges    = {{0, 2}, {0, 3}, {0, 4}, {0, 5}, {1, 2}, {1, 3},
                     {1, 4}, {1, 5}, {2, 4}, {2, 5}, {3, 4}, {3, 5}};
-        position.setXYZ(200, -200, 0);
+        position.setXYZ(200, -200, 100);
         for (auto& vertex : vertices)
             vertex = vertex + position;
     }
@@ -51,7 +51,7 @@ Shape3D::Shape3D(int platonicSolidID)
                     { 4,  8}, { 4, 14}, { 4, 18}, { 5,  9}, { 5, 14}, { 5, 19},
                     { 6, 10}, { 6, 15}, { 6, 18}, { 7, 11}, { 7, 15}, { 7, 19},
                     { 8, 10}, { 9, 11}, {12, 14}, {13, 15}, {16, 17}, {18, 19}};
-        position.setXYZ(-200, 200, 0);
+        position.setXYZ(-200, 200, 100);
         for (auto& vertex : vertices)
             vertex = vertex + position;
     }
@@ -66,7 +66,7 @@ Shape3D::Shape3D(int platonicSolidID)
                     { 2,  8}, { 2, 10}, { 3,  5}, { 3,  7}, { 3,  9}, { 3, 11},
                     { 4,  6}, { 4,  8}, { 4,  9}, { 5,  7}, { 5,  8}, { 5,  9},
                     { 6, 10}, { 6, 11}, { 7, 10}, { 7, 11}, { 8,  9}, {10, 11}};
-        position.setXYZ(-200, -200, 0);
+        position.setXYZ(-200, -200, 100);
         for (auto& vertex : vertices)
             vertex = vertex + position;
     }

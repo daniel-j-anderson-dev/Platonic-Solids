@@ -7,10 +7,34 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     renderer2D    = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
 	isLocalRotation = true;
+	setAxes();
 
 	// TODO: remove these members
     isRunning     = true;
 	setShapes();
+}
+
+void Renderer::setAxes()
+{
+	double length = 0;
+	if (ORIGIN.getX() > ORIGIN.getY())
+	{
+		length = ORIGIN.getX() * 2;
+	}
+	else
+	{
+		length = ORIGIN.getY() * 2;
+	}
+	std::vector<Point> xAxisVertices = {Point(-length, 0, 0), Point(0, 0, 0), Point(length, 0, 0)};
+	std::vector<Point> yAxisVertices = {Point(0, -length, 0), Point(0, 0, 0), Point(0, length, 0)};
+	std::vector<Point> zAxisVertices = {Point(0, 0, -length), Point(0, 0, 0), Point(0, 0, length)};
+	std::vector<std::pair<int, int>> axisEdges = {{0, 1}, {1, 2}};
+	axes[0].vertices = xAxisVertices;
+	axes[1].vertices = yAxisVertices;
+	axes[2].vertices = zAxisVertices;
+	axes[0].edges	 = axisEdges;
+	axes[1].edges 	 = axisEdges;
+	axes[2].edges	 = axisEdges;
 }
 
 void Renderer::drawLine(Point startPoint, Point endPoint)
@@ -93,7 +117,8 @@ void Renderer::rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Poi
 	shape.vertices = rotatedVertices;
 }
 
-void Renderer::rotateShapesLocal(Point axis, double angle)
+template <int size>
+void Renderer::rotateShapesLocal(Shape3D (&shapes)[size], Point axis, double angle)
 {
 	for (auto& shape : shapes)
 	{
@@ -101,7 +126,8 @@ void Renderer::rotateShapesLocal(Point axis, double angle)
 	}
 }
 
-void Renderer::rotateShapesAboutPoint(Point centerOfRotation, Point axis, double angle)
+template <int size>
+void Renderer::rotateShapesAboutPoint(Shape3D (&shapes)[size], Point centerOfRotation, Point axis, double angle)
 {
 	for (auto& shape : shapes)
 	{
@@ -178,11 +204,12 @@ void Renderer::run()
 
 		if (isLocalRotation)
 		{
-			rotateShapesLocal(axisOfRotation, 0.1);
+			rotateShapesLocal(shapes, axisOfRotation, 0.1);
 		}
 		else
 		{
-			rotateShapesAboutPoint(Point(0, 0, 0), axisOfRotation, 0.1);
+			rotateShapesAboutPoint(shapes, Point(0, 0, 0), axisOfRotation, 0.1);
+			rotateShapesAboutPoint(axes,   Point(0, 0, 0), axisOfRotation, 0.1);
 		}
 
 
