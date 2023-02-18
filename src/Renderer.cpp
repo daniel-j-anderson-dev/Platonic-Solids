@@ -39,41 +39,41 @@ void Renderer::setAxes()
 
 void Renderer::drawAxes()
 {
-	Point color = Point(0, 0, 0);
+	rgbaColor color = {0, 0, 0, 255};
 	for (int i = 0; i < 3; i++)
 	{
 		switch (i)
 		{
 			case 0:
-				color = Point(255, 0, 0);
+				color = {255, 0, 0, 255};
 				break;
 			case 1:		
-				color = Point(0, 255, 0);
+				color = {0, 255, 0, 255};
 				break;
 			case 2:		
-				color = Point(0, 0, 255);
+				color = {0, 0, 255, 255};
 				break;
 		}
 		
 		for (auto &edge : axes[i].edges)
 		{
 			drawLine(color, axes[i].vertices[edge.first], axes[i].vertices[edge.second]);
+			// TODO: draw negative half axes as a dashed line
 		}
 	}
 }
 
-void Renderer::drawLine(Point color, Point startPoint, Point endPoint)
+void Renderer::drawLine(rgbaColor color, Point startPoint, Point endPoint)
 {
 	startPoint = startPoint + ORIGIN;
 	endPoint   = endPoint   + ORIGIN;
-	SDL_SetRenderDrawColor(renderer2D, color.getX(), color.getY(), color.getZ(), 255); // red, green, blue, alpha
+	SDL_SetRenderDrawColor(renderer2D, color.red, color.blue, color.green, color.alpha);
 	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-	SDL_RenderPresent(renderer2D);
 }
 
 void Renderer::drawShape(Shape3D shape)
 {
-	Point black = Point(0, 0, 0);
+	rgbaColor black = {0, 0, 0, 255};
 	for (auto &edge : shape.edges)
 	{
 		drawLine(black, shape.vertices[edge.first], shape.vertices[edge.second]);
@@ -91,8 +91,17 @@ void Renderer::drawShapes(Shape3D (&shapes)[size])
 
 void Renderer::clearScreen()
 {
+	startTime = SDL_GetPerformanceCounter();
 	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
 	SDL_RenderClear(renderer2D);
+}
+
+void Renderer::update()
+{
+	SDL_RenderPresent(renderer2D);
+	endTime = SDL_GetPerformanceCounter();
+	double elapsedTime = (endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
+	SDL_Delay(floor((16.6666666666666666) - elapsedTime));
 }
 
 Renderer::~Renderer()
@@ -223,8 +232,6 @@ void Renderer::run()
 {
     while (isRunning)
 	{
-		Uint64 startTime = SDL_GetPerformanceCounter();
-
 		clearScreen();
 
 		drawShapes(shapes);
@@ -233,20 +240,18 @@ void Renderer::run()
 
 		handleEvents(event);
 
+		// Rotator.rotateShapes()
 		if (isLocalRotation)
 		{
-			rotateShapesLocal(shapes, axisOfRotation, 0.1);
+			rotateShapesLocal(shapes, axisOfRotation, 0.01);
 		}
 		else
 		{
-			rotateShapesAboutPoint(shapes, Point(0, 0, 0), axisOfRotation, 0.1);
-			rotateShapesAboutPoint(axes,   Point(0, 0, 0), axisOfRotation, 0.1);
+			rotateShapesAboutPoint(shapes, Point(0, 0, 0), axisOfRotation, 0.01);
+			rotateShapesAboutPoint(axes,   Point(0, 0, 0), axisOfRotation, 0.01);
 		}
 
-
-		Uint64 endTime = SDL_GetPerformanceCounter();
-		double elapsedTime = (endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
-		SDL_Delay(floor((16.6666666666666666) - elapsedTime));
+		update();
 	}
 	this->~Renderer();
 }
