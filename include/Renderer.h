@@ -1,5 +1,5 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef Renderer_H
+#define Renderer_H
 #pragma once
 #include "../include/SDL2/SDL.h"
 #include "../include/Quaternion.h"
@@ -23,11 +23,11 @@ public:
 
     void  drawLine(Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
-    void  drawShapes();
+    void  drawShapes(Shape3D shapes[]);
 
     void  clearScreen();
-    void  handleEvents();
-    void  handleInput();
+    void  handleEvents(SDL_Event event);
+    Point getAxisOfRotation(const Uint8* keys);
 
     void  run();
     
@@ -38,7 +38,9 @@ private:
     SDL_Event     event;
     const Uint8*  keys;
     bool          isRunning;
+    bool          isLocalrotation;
 
+    Point         axisOfRotation;
     Point         ORIGIN;
     Shape3D       shapes[5];
 };

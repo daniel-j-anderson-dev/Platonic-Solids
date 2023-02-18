@@ -2,7 +2,6 @@
 #define SHAPE3D_H
 #pragma once
 
-#include "../include/SDL2/SDL.h"
 #include "../include/Point.h"
 #include <cmath>
 #include <vector>

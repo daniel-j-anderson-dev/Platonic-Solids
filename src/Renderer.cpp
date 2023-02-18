@@ -5,10 +5,42 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     SDL_Init(SDL_INIT_VIDEO);
     window        = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     renderer2D    = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	keys          = SDL_GetKeyboardState(NULL);
 	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
     isRunning     = true;
-	keys          = SDL_GetKeyboardState(NULL);
+	isLocalrotation = true;
 	setShapes();
+}
+
+void Renderer::drawLine(Point startPoint, Point endPoint)
+{
+	startPoint = startPoint + ORIGIN;
+	endPoint   = endPoint   + ORIGIN;
+	SDL_SetRenderDrawColor(renderer2D, 0, 0, 0, 255); // red, green, blue, alpha
+	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+	SDL_RenderPresent(renderer2D);
+}
+
+void Renderer::drawShape(Shape3D shape)
+{
+	for (auto &edge : shape.edges)
+	{
+		drawLine(shape.vertices[edge.first], shape.vertices[edge.second]);
+	}
+}
+
+void Renderer::drawShapes(Shape3D shapes[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		drawShape(shapes[i]);
+	}
+}
+
+void Renderer::clearScreen()
+{
+	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
+	SDL_RenderClear(renderer2D);
 }
 
 Renderer::~Renderer()
@@ -83,43 +115,9 @@ void Renderer::rotateShapesAboutPoint(Point centerOfRotation, Point axis, double
 	}
 }
 
-void Renderer::drawLine(Point startPoint, Point endPoint)
+Point Renderer::getAxisOfRotation(const Uint8* keys)
 {
-	startPoint = startPoint + ORIGIN;
-	endPoint   = endPoint   + ORIGIN;
-	SDL_SetRenderDrawColor(renderer2D, 0, 0, 0, 255);
-	SDL_RenderDrawLine(renderer2D, startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-	SDL_RenderDrawPoint(renderer2D, startPoint.getX(), startPoint.getY());
-	SDL_RenderDrawPoint(renderer2D, endPoint.getX(), endPoint.getY());
-	SDL_RenderPresent(renderer2D);
-}
-
-void Renderer::drawShape(Shape3D shape)
-{
-	for (auto &edge : shape.edges)
-	{
-		drawLine(shape.vertices[edge.first], shape.vertices[edge.second]);
-	}
-}
-
-void Renderer::drawShapes()
-{
-	for (auto &shape : shapes)
-	{
-		drawShape(shape);
-	}
-}
-
-void Renderer::clearScreen()
-{
-	SDL_SetRenderDrawColor(renderer2D, 255, 255, 255, 255);
-	SDL_RenderClear(renderer2D);
-}
-
-void Renderer::handleInput()
-{
-	Point axisOfRotation = Point(0, 0, 0);
-	bool  isLocalrotation = true;
+	isLocalrotation = true;
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning = false;
 	if (keys[SDL_SCANCODE_0])
@@ -128,34 +126,40 @@ void Renderer::handleInput()
 		isLocalrotation = false;
 
 	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.setX(1);
+		axisOfRotation.setX( 1);
 	if (keys[SDL_SCANCODE_D])
 		axisOfRotation.setX(-1);
 	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.setY(1);
+		axisOfRotation.setY( 1);
 	if (keys[SDL_SCANCODE_S])
 		axisOfRotation.setY(-1);
 	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.setZ(1);
+		axisOfRotation.setZ( 1);
 	if (keys[SDL_SCANCODE_Q])
 		axisOfRotation.setZ(-1);
 	if (keys[SDL_SCANCODE_SPACE])
 		axisOfRotation.setXYZ(1, 1, 1);
 	
-	if (isLocalrotation)
-		rotateShapesLocal(axisOfRotation, 0.1);
-	else
-		rotateShapesAboutPoint(Point(0, 0, 0), axisOfRotation, 0.1);
+	return axisOfRotation;
 }
 
-void Renderer::handleEvents()
+void Renderer::handleEvents(SDL_Event event)
 {	
 	while (SDL_PollEvent(&event))
 	{
-		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+		switch (event.type)
 		{
-			handleInput();
-			// handle other events
+			case SDL_KEYDOWN:
+				this->axisOfRotation = getAxisOfRotation(SDL_GetKeyboardState(NULL));
+				break;
+
+			case SDL_KEYUP:
+				if (!event.key.repeat)
+				{
+					this->axisOfRotation = Point(0, 0, 0);
+				}
+				this->axisOfRotation = getAxisOfRotation(SDL_GetKeyboardState(NULL));
+				break;
 		}
 	}
 }
@@ -165,15 +169,26 @@ void Renderer::run()
     while (isRunning)
 	{
 		Uint64 startTime = SDL_GetPerformanceCounter();
+
 		clearScreen();
 
-		drawShapes();
+		drawShapes(shapes);
 
-		handleEvents();
+		handleEvents(event);
+
+		if (isLocalrotation)
+		{
+			rotateShapesLocal(this->axisOfRotation, 0.1);
+		}
+		else
+		{
+			rotateShapesAboutPoint(Point(0, 0, 0), this->axisOfRotation, 0.1);
+		}
+
 
 		Uint64 endTime = SDL_GetPerformanceCounter();
 		double elapsedTime = (endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
-		SDL_Delay(floor((16 + 2/3) - elapsedTime));
+		SDL_Delay(floor((16.6666666666666666) - elapsedTime));
 	}
 	this->~Renderer();
 }
