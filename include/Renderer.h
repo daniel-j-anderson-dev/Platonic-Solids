@@ -23,7 +23,8 @@ public:
 
     void  drawLine(Point startPoint, Point endPoint);
     void  drawShape(Shape3D shape);
-    void  drawShapes(Shape3D shapes[]);
+    template <int length>
+    void  drawShapes(Shape3D (&shapes)[length]);
 
     void  clearScreen();
     void  handleEvents(SDL_Event event);
@@ -36,7 +37,6 @@ private:
     SDL_Window*   window;
     SDL_Renderer* renderer2D;
     SDL_Event     event;
-    const Uint8*  keys;
     bool          isRunning;
     bool          isLocalRotation;
 

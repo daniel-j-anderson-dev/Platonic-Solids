@@ -5,10 +5,11 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     SDL_Init(SDL_INIT_VIDEO);
     window        = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     renderer2D    = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	keys          = SDL_GetKeyboardState(NULL);
 	ORIGIN        = Point(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0);
-    isRunning     = true;
 	isLocalRotation = true;
+
+	// TODO: remove these members
+    isRunning     = true;
 	setShapes();
 }
 
@@ -29,11 +30,12 @@ void Renderer::drawShape(Shape3D shape)
 	}
 }
 
-void Renderer::drawShapes(Shape3D shapes[])
+template <int length>
+void Renderer::drawShapes(Shape3D (&shapes)[length])
 {
-	for (int i = 0; i < 5; i++)
+	for (auto &shape : shapes)
 	{
-		drawShape(shapes[i]);
+		drawShape(shape);
 	}
 }
 
