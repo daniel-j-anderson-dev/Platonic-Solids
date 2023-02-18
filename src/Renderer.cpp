@@ -315,17 +315,19 @@ void Renderer::run()
 		handleEvents(event);
 
 		// Rotator.rotateShapes()
-		if (isLocalRotation && !isWorldRotation)
+		if (isWorldRotation)
+		{
+			rotateShapesAboutPoint(axes,   {0, 0, 0}, axisOfRotation, 0.01);
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+
+		}
+		else if (isLocalRotation)
 		{
 			rotateShapesLocal(shapes, axisOfRotation, 0.01);
 		}
 		else
 		{
 			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-		}
-		if (isWorldRotation)
-		{
-			rotateShapesAboutPoint(axes,   {0, 0, 0}, axisOfRotation, 0.01);
 		}
 
 		translateShapes(shapes, axisOfTranslation, 1);
