@@ -6,27 +6,16 @@
 #include "../include/Quaternion.h"
 #include <cmath>
 
-class Transformer
-{
-public:
-    Transformer();
-    ~Transformer();
+std::vector<Shape3D> platonicSolids();
+void rotatePoint(Point &point, Point axis, double angle);
+void rotatePointAboutAnother(Point &point, Point centerOfRotation, Point axis, double angle);
+void rotateShapeLocal(Shape3D &shape, Point axis, double angle);
+void rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, double angle);
+void rotateShapesLocal(std::vector<Shape3D> &shapes, Point axis, double angle);
+void rotateShapesAboutPoint(std::vector<Shape3D> &shapes,Point centerOfRotation, Point axis, double angle);
 
-    void rotatePoint(Point &point, Point axis, double angle);
-    void rotatePointAboutAnother(Point &point, Point centerOfRotation, Point axis, double angle);
-    void  rotateShapeLocal(Shape3D &shape, Point axis, double angle);
-    void  rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, double angle);
-    template <int size>
-    void  rotateShapesLocal(Shape3D (&shapes)[size], Point axis, double angle);
-    template <int size>
-    void  rotateShapesAboutPoint(Shape3D (&shapes)[size],Point centerOfRotation, Point axis, double angle);
-
-    void translatePoint(Point &point, Point axis, double distance);
-    void  tanslateShape(Shape3D &shape, Point axis, double distance);
-    template <int size>
-    void  translateShapes(Shape3D (&shapes)[size], Point axis, double distance);
-
-private:
-};
+void translatePoint(Point &point, Point axis, double distance);
+void tanslateShape(Shape3D &shape, Point axis, double distance);
+void translateShapes(std::vector<Shape3D> &shapes, Point axis, double distance);
 
 #endif
