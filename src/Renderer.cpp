@@ -226,9 +226,9 @@ void Renderer::handleInput(const Uint8* keys)
 		axisOfRotation.y++;
 	if (keys[SDL_SCANCODE_A])
 		axisOfRotation.y--;
-	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.z++;
 	if (keys[SDL_SCANCODE_Q])
+		axisOfRotation.z++;
+	if (keys[SDL_SCANCODE_E])
 		axisOfRotation.z--;
 	if (keys[SDL_SCANCODE_SPACE])
 	{
@@ -243,7 +243,7 @@ void Renderer::handleInput(const Uint8* keys)
 		axisOfTranslation.y += xAxis.y;
 		axisOfTranslation.z += xAxis.z;
 	}
-	if (keys[SDL_SCANCODE_LEFT])
+	if (keys[SDL_SCANCODE_LEFT]) // WHY DOESNT THIS WORK?!?!!?@!?!?
 	{
 		axisOfTranslation.x -= xAxis.x;
 		axisOfTranslation.x -= xAxis.y;
@@ -288,6 +288,7 @@ void Renderer::handleEvents(SDL_Event event)
 			case SDL_KEYUP:
 				handleInput(SDL_GetKeyboardState(NULL));
 				break;
+			// other events
 		}
 	}
 }

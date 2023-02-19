@@ -8,7 +8,7 @@ Shape3D::Shape3D()
 Shape3D::Shape3D(int platonicSolidID)
 {
     double SCALE = 50;
-    const double PHI   = (1 + sqrt(5)) / 2;
+    const double PHI   = 1.61803398874989484820;
     if (platonicSolidID == 0) // Cube
     {
         vertices = {{ SCALE, SCALE, SCALE}, { SCALE, SCALE, -SCALE}, { SCALE, -SCALE, SCALE}, { SCALE, -SCALE, -SCALE},

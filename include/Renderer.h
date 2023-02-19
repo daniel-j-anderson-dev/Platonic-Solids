@@ -55,20 +55,24 @@ public:
 private:
 
     // TODO: take these out of this class
+    // EventHandler
     SDL_Event     event;
     bool          isRunning;
-    bool          isLocalRotation;
     Uint64        startTime;
     Uint64        endTime;
-    Shape3D       shapes[5];
+    bool          isLocalRotation;
     bool          isWorldRotation;
+    Point         axisOfRotation;
+    Point         axisOfTranslation;
+
+    // main
+    Shape3D       shapes[5];
+
 
     // you can stay :)
     SDL_Window*   window;
     SDL_Renderer* renderer2D;
     SDL_Texture*  background;
-    Point         axisOfRotation;
-    Point         axisOfTranslation;
     Point         ORIGIN;
     Shape3D       axes[3];
 };
