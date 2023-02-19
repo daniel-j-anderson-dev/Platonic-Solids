@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
     bool         		 isWorldRotation   = false;
     Point        		 axisOfRotation    = {0, 0, 0};
     Point         		 axisOfTranslation = {0, 0, 0};
+	double 				 rotationSpeed     = .05;
+	double				 movementSpeed     = 5;
 
 	while (isRunning)
 	{
@@ -25,20 +27,19 @@ int main(int argc, char *argv[])
 
 		if (isWorldRotation)
 		{
-			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, 0.01);
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-
+			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, rotationSpeed);
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, rotationSpeed);
 		}
 		else if (isLocalRotation)
 		{
-			rotateShapesLocal(shapes, axisOfRotation, 0.01);
+			rotateShapesLocal(shapes, axisOfRotation, rotationSpeed);
 		}
 		else
 		{
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, rotationSpeed);
 		}
 
-		translateShapes(shapes, axisOfTranslation, 5);
+		translateShapes(shapes, axisOfTranslation, movementSpeed);
 
 		renderer3D.draw();
 	}
@@ -152,7 +153,7 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 	}
 }
 
-void handleEvents(SDL_Event event, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
+void handleEvents(SDL_Event event,  Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
 {	
 	while (SDL_PollEvent(&event))
 	{
