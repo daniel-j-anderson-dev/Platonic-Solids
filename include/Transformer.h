@@ -4,6 +4,7 @@
 #include "../include/Point.h"
 #include "../include/Shape3D.h"
 #include "../include/Quaternion.h"
+#include <cmath>
 
 class Transformer
 {

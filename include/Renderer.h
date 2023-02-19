@@ -4,6 +4,7 @@
 #include "../include/SDL2/SDL.h"
 #include "../include/Quaternion.h"
 #include "../include/Shape3D.h"
+#include <cmath>
 
 struct rgbaColor
 {

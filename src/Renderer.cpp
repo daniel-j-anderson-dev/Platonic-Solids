@@ -1,4 +1,4 @@
-#include "../include/Renderer.h"
+#include "../include/Renderer.h"	
 
 Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {    
@@ -296,11 +296,93 @@ void Renderer::handleEvents(SDL_Event event)
 // TODO: put vertex and edge data for each shape here
 void Renderer::setShapes() // sets shapes to the platonic solids
 {
-	shapes[0] = Shape3D(0); // Cube
-	shapes[1] = Shape3D(1); // Tetrahedron
-	shapes[2] = Shape3D(2); // Octahedron
-	shapes[3] = Shape3D(3); // Dodecahedron
-	shapes[4] = Shape3D(4); // Icosahedron
+	double scale = 50;
+    const double PHI   = 1.61803398874989484820;
+	std::vector<Point> cubeVertices = {
+		{ scale, scale, scale}, { scale, scale, -scale}, { scale, -scale, scale}, { scale, -scale, -scale},
+        {-scale, scale, scale}, {-scale, scale, -scale}, {-scale, -scale, scale}, {-scale, -scale, -scale}};
+	std::vector<std::pair<int, int>> cubeEdges = {
+		{0, 1}, {0, 2}, {0, 4}, {1, 3}, {1, 5}, {2, 3},
+        {2, 6}, {3, 7}, {4, 5}, {4, 6}, {5, 7}, {6, 7}};
+	Point cubePosition = {0, 0, 100};
+	for (auto& vertex : cubeVertices)
+	{
+		vertex.x += cubePosition.x;
+		vertex.y += cubePosition.y;
+		vertex.z += cubePosition.z;
+	}
+
+	std::vector<Point> tetrahedronVertices = {
+		{scale, scale, scale}, {-scale, -scale, scale}, {-scale, scale, -scale}, {scale, -scale, -scale}};
+	std::vector<std::pair<int, int>> tetrahedronEdges = {
+		{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}};
+	Point tetrahedronPosition = {200, 200, 100};
+	for (auto& vertex : tetrahedronVertices)
+	{
+		vertex.x += tetrahedronPosition.x;
+		vertex.y += tetrahedronPosition.y;
+		vertex.z += tetrahedronPosition.z;
+	};
+
+	scale *= 1.25; // make the octahedron similar size
+	std::vector<Point> octahedronVertices = {
+		{scale, 0, 0},  {-scale, 0, 0}, {0, scale, 0},
+        {0, -scale, 0}, {0, 0, scale},  {0, 0, -scale}};
+	std::vector<std::pair<int, int>> octahedronEdges = {
+		{0, 2}, {0, 3}, {0, 4}, {0, 5}, {1, 2}, {1, 3},
+        {1, 4}, {1, 5}, {2, 4}, {2, 5}, {3, 4}, {3, 5}};;
+	Point octahedronPosition = {200, -200, 100};
+	for (auto& vertex : octahedronVertices)
+	{
+		vertex.x += octahedronPosition.x;
+		vertex.y += octahedronPosition.y;
+		vertex.z += octahedronPosition.z;
+	};
+
+	scale *=.6; // make the dodecah and icosah .75 times scale
+	std::vector<Point> dodecahedronVertices = {
+		{scale, scale, scale},     {scale, scale, -scale},     {scale, -scale, scale},      {scale, -scale, -scale},
+        {-scale, scale, scale},    {-scale, scale, -scale},    {-scale, -scale, scale},     {-scale, -scale, -scale},
+        {0, scale/PHI, scale*PHI}, {0, scale/PHI, -scale*PHI}, {0, -scale /PHI, scale*PHI}, {0, -scale/PHI, -scale*PHI},
+        {scale/PHI, scale*PHI, 0}, {scale/PHI, -scale*PHI, 0}, {-scale/PHI, scale*PHI, 0},  {-scale/PHI, -scale*PHI, 0},
+        {scale*PHI, 0, scale/PHI}, {scale*PHI, 0, -scale/PHI}, {-scale*PHI, 0, scale/PHI},  {-scale*PHI, 0, -scale/PHI}};;
+	std::vector<std::pair<int, int>> dodecahedronEdges = {
+		{ 0,  8}, { 0, 12}, { 0, 16}, { 1,  9}, { 1, 12}, { 1, 17},
+        { 2, 10}, { 2, 13}, { 2, 16}, { 3, 11}, { 3, 13}, { 3, 17},
+        { 4,  8}, { 4, 14}, { 4, 18}, { 5,  9}, { 5, 14}, { 5, 19},
+        { 6, 10}, { 6, 15}, { 6, 18}, { 7, 11}, { 7, 15}, { 7, 19},
+        { 8, 10}, { 9, 11}, {12, 14}, {13, 15}, {16, 17}, {18, 19}};
+	Point dodecahedronPosition = {-200, 200, 100};
+	for (auto& vertex : dodecahedronVertices)
+	{
+		vertex.x += dodecahedronPosition.x;
+		vertex.y += dodecahedronPosition.y;
+		vertex.z += dodecahedronPosition.z;
+	};
+
+	std::vector<Point> icosahedronVertices = {
+		{0, scale, scale*PHI}, {0, scale, -scale*PHI}, {0, -scale, scale*PHI}, {0, -scale, -scale*PHI},
+		{scale, scale*PHI, 0}, {scale, -scale*PHI, 0}, {-scale, scale*PHI, 0}, {-scale, -scale*PHI, 0},
+		{scale*PHI, 0, scale}, {scale*PHI, 0, -scale}, {-scale*PHI, 0, scale}, {-scale*PHI, 0, -scale}};
+	std::vector<std::pair<int, int>> icosahedronEdges = {
+		{ 0,  2}, { 0,  4}, { 0,  6}, { 0,  8}, { 0, 10}, { 1,  3},
+        { 1,  4}, { 1,  6}, { 1,  9}, { 1, 11}, { 2,  5}, { 2,  7},
+        { 2,  8}, { 2, 10}, { 3,  5}, { 3,  7}, { 3,  9}, { 3, 11},
+        { 4,  6}, { 4,  8}, { 4,  9}, { 5,  7}, { 5,  8}, { 5,  9},
+        { 6, 10}, { 6, 11}, { 7, 10}, { 7, 11}, { 8,  9}, {10, 11}};
+	Point icosahedronPosition = {-200, -200, 100};
+	for (auto& vertex : icosahedronVertices)
+	{
+		vertex.x += icosahedronPosition.x;
+		vertex.y += icosahedronPosition.y;
+		vertex.z += icosahedronPosition.z;
+	};
+
+	shapes[0] = {cubeVertices,         cubeEdges,         cubePosition};
+	shapes[1] = {tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition};
+	shapes[2] = {octahedronVertices,   octahedronEdges,   octahedronPosition};
+	shapes[3] = {dodecahedronVertices, dodecahedronEdges, dodecahedronPosition};
+	shapes[4] = {icosahedronVertices,  icosahedronEdges,  icosahedronPosition};
 }
 
 void Renderer::run()
