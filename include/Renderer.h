@@ -2,9 +2,8 @@
 #define Renderer_H
 #pragma once
 #include "../include/SDL2/SDL.h"
-#include "../include/Quaternion.h"
 #include "../include/Shape3D.h"
-#include "../include/Transformer.h"
+#include <cmath>
 
 struct rgbaColor
 {
@@ -21,44 +20,35 @@ public:
     ~Renderer();
 
     // assessors
+    Point xAxis();
+    Point yAxis();
+    Point zAxis();
+    std::vector<Shape3D> *getAxes();
 
-    void setAxes();
+    // mutators
+    void axesDefault();
+    void setShapes(std::vector<Shape3D> *shapes);
+
+    // actions
+    void drawLine(rgbaColor color, Point startPoint, Point endPoint);
+    void drawShape(Shape3D shape);
+    void drawShapes(std::vector<Shape3D> shapes);
     void drawAxes();
 
-    void  drawLine(rgbaColor color, Point startPoint, Point endPoint);
-    void  drawShape(Shape3D shape);
-    void  drawShapes(std::vector<Shape3D> shapes);
+    void clearScreen();
+    void update();
+    void draw();
 
-    void  clearScreen();
-    void  update();
-    void  handleEvents(SDL_Event event);
-    void  handleInput(const Uint8* keys);
-
-    void  run();
-    
 private:
 
-    // TODO: take these out of this class
-    // EventHandler
-    SDL_Event     event;
-    bool          isRunning;
-    Uint64        startTime;
-    Uint64        endTime;
-    bool          isLocalRotation;
-    bool          isWorldRotation;
-    Point         axisOfRotation;
-    Point         axisOfTranslation;
-
-    // main
-    std::vector<Shape3D> shapes;
-
-
-    // you can stay :)
     SDL_Window*          window;
     SDL_Renderer*        renderer2D;
     SDL_Texture*         background;
     Point                ORIGIN;
+    std::vector<Shape3D> *shapes;
     std::vector<Shape3D> axes;
+    Uint64               startTime;
+    Uint64               endTime;
 };
 
 #endif

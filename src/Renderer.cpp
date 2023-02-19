@@ -1,23 +1,19 @@
-#include "../include/Renderer.h"	
+#include "../include/Renderer.h"
 
 Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {    
     SDL_Init(SDL_INIT_VIDEO);
-    window     = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    renderer2D = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	background = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("background.bmp"));
-	ORIGIN          = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
-	isLocalRotation = true;
-	axisOfRotation    = {0, 0, 0};
-	axisOfTranslation = {0, 0, 0};
-	setAxes();
-
-	// TODO: remove these members
-    isRunning     = true;
-	shapes = platonicSolids();
+    window            = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    renderer2D        = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	background 		  = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("background.bmp"));
+	ORIGIN            = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
+	axesDefault();
+	startTime = SDL_GetPerformanceCounter();
+	endTime   = 0;
+	shapes = NULL;
 }
 
-void Renderer::setAxes()
+void Renderer::axesDefault()
 {
 	std::vector<Shape3D> temp;
 	double length = 0;
@@ -37,6 +33,46 @@ void Renderer::setAxes()
 	temp.push_back({yAxisVertices, axisEdges, {0, 0, 0}});
 	temp.push_back({zAxisVertices, axisEdges, {0, 0, 0}});
 	axes = temp;
+}
+
+Point Renderer::xAxis()
+{
+	Point xAxis = axes.at(0).vertices.at(2);
+	double norm = sqrt(xAxis.x*xAxis.x + xAxis.y*xAxis.y + xAxis.z*xAxis.z);
+	xAxis.x /= norm;
+	xAxis.y /= norm;
+	xAxis.z /= norm;
+	return xAxis;
+}
+
+Point Renderer::yAxis()
+{
+	Point yAxis = axes.at(1).vertices.at(2);
+	double norm = sqrt(yAxis.x*yAxis.x + yAxis.y*yAxis.y + yAxis.z*yAxis.z);
+	yAxis.x /= norm;
+	yAxis.y /= norm;
+	yAxis.z /= norm;
+	return yAxis;
+}
+
+Point Renderer::zAxis()
+{
+	Point zAxis = axes.at(2).vertices.at(2);
+	double norm = sqrt(zAxis.x*zAxis.x + zAxis.y*zAxis.y + zAxis.z*zAxis.z);
+	zAxis.x /= norm;
+	zAxis.y /= norm;
+	zAxis.z /= norm;
+	return zAxis;
+}
+
+std::vector<Shape3D> *Renderer::getAxes()
+{
+	return &(this->axes);
+}
+
+void Renderer::setShapes(std::vector<Shape3D> *shapes)
+{
+	this->shapes = shapes;
 }
 
 void Renderer::drawAxes()
@@ -97,6 +133,16 @@ void Renderer::update()
 	endTime = SDL_GetPerformanceCounter();
 	double elapsedTime = (endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
 	SDL_Delay(floor((16.6666666666666666) - elapsedTime));
+	startTime = SDL_GetPerformanceCounter();
+}
+
+void Renderer::draw()
+{
+	this->clearScreen();
+
+	this->drawShapes(*(this->shapes));
+	
+	this->update();
 }
 
 Renderer::~Renderer()
@@ -104,138 +150,4 @@ Renderer::~Renderer()
     SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer2D);
 	SDL_Quit();
-}
-
-// TODO: put handleInput, handlEvent and setShapes in main
-void Renderer::handleInput(const Uint8* keys)
-{
-	axisOfRotation    = {0, 0, 0};
-	axisOfTranslation = {0, 0, 0};
-	isLocalRotation = true;
-	isWorldRotation = false;
-
-	Point xAxis = axes.at(0).vertices.at(2);
-	Point yAxis = axes.at(1).vertices.at(2);
-	Point zAxis = axes.at(2).vertices.at(2);
-
-	if (keys[SDL_SCANCODE_ESCAPE])
-		isRunning = false;
-	if (keys[SDL_SCANCODE_LSHIFT])
-		isLocalRotation = false;
-	if (keys[SDL_SCANCODE_LCTRL])
-		isWorldRotation = true;
-	if (keys[SDL_SCANCODE_0])
-	{
-		shapes = platonicSolids();
-		setAxes();
-	}
-
-	if (keys[SDL_SCANCODE_S])
-		axisOfRotation.x++;
-	if (keys[SDL_SCANCODE_W])
-		axisOfRotation.x--;
-	if (keys[SDL_SCANCODE_D])
-		axisOfRotation.y++;
-	if (keys[SDL_SCANCODE_A])
-		axisOfRotation.y--;
-	if (keys[SDL_SCANCODE_Q])
-		axisOfRotation.z++;
-	if (keys[SDL_SCANCODE_E])
-		axisOfRotation.z--;
-	if (keys[SDL_SCANCODE_SPACE])
-	{
-		axisOfRotation.x++;
-		axisOfRotation.y++;
-		axisOfRotation.z++;
-	}
-
-	if (keys[SDL_SCANCODE_RIGHT])
-	{
-		axisOfTranslation.x += xAxis.x;
-		axisOfTranslation.y += xAxis.y;
-		axisOfTranslation.z += xAxis.z;
-	}
-	if (keys[SDL_SCANCODE_LEFT]) // WHY DOESNT THIS WORK?!?!!?@!?!?
-	{
-		axisOfTranslation.x -= xAxis.x;
-		axisOfTranslation.x -= xAxis.y;
-		axisOfTranslation.x -= xAxis.z;
-	}
-	if (keys[SDL_SCANCODE_DOWN])
-	{
-		axisOfTranslation.x += yAxis.x;
-		axisOfTranslation.y += yAxis.y;
-		axisOfTranslation.z += yAxis.z;
-	}
-	if (keys[SDL_SCANCODE_UP])
-	{
-		axisOfTranslation.x -= yAxis.x;
-		axisOfTranslation.y -= yAxis.y;
-		axisOfTranslation.z -= yAxis.z;
-	}
-	if (keys[SDL_SCANCODE_PAGEUP])
-	{
-		axisOfTranslation.x += zAxis.x;
-		axisOfTranslation.y += zAxis.y;
-		axisOfTranslation.z += zAxis.z;
-	}
-	if (keys[SDL_SCANCODE_PAGEDOWN])
-	{
-		axisOfTranslation.x -= zAxis.x;
-		axisOfTranslation.y -= zAxis.y;
-		axisOfTranslation.z -= zAxis.z;
-	}
-}
-
-void Renderer::handleEvents(SDL_Event event)
-{	
-	while (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-			case SDL_KEYDOWN:
-				handleInput(SDL_GetKeyboardState(NULL));
-				break;
-
-			case SDL_KEYUP:
-				handleInput(SDL_GetKeyboardState(NULL));
-				break;
-			// other events
-		}
-	}
-}
-
-void Renderer::run()
-{
-    while (isRunning)
-	{
-		startTime = SDL_GetPerformanceCounter();
-		
-		clearScreen();
-
-		drawShapes(shapes);
-
-		handleEvents(event);
-
-		// Rotator.rotateShapes()
-		if (isWorldRotation)
-		{
-			rotateShapesAboutPoint(axes,   {0, 0, 0}, axisOfRotation, 0.01);
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-
-		}
-		else if (isLocalRotation)
-		{
-			rotateShapesLocal(shapes, axisOfRotation, 0.01);
-		}
-		else
-		{
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-		}
-
-		translateShapes(shapes, axisOfTranslation, 1);
-
-		update();
-	}
-	this->~Renderer();
 }
