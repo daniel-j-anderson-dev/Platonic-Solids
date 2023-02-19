@@ -70,6 +70,11 @@ std::vector<Shape3D> *Renderer::getAxes()
 	return &(this->axes);
 }
 
+std::vector<Shape3D> *Renderer::getShapes()
+{
+	return this->shapes;
+}
+
 void Renderer::setShapes(std::vector<Shape3D> *shapes)
 {
 	this->shapes = shapes;

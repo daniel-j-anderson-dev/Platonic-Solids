@@ -24,6 +24,7 @@ public:
     Point yAxis();
     Point zAxis();
     std::vector<Shape3D> *getAxes();
+    std::vector<Shape3D> *getShapes();
 
     // mutators
     void axesDefault();
