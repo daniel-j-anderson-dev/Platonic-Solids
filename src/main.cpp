@@ -1,6 +1,49 @@
 #include "../include/Renderer.h"
 #include "../include/Transformer.h"
 
+void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning);
+void handleEvents(SDL_Event event,  Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning);
+
+int main(int argc, char *argv[])
+{
+	Renderer  			 renderer3D        = Renderer(1920, 1080);
+	std::vector<Shape3D> shapes            = platonicSolids();
+	renderer3D.setShapes(&shapes);
+	SDL_Event 			 event;
+	bool	  			 isRunning         = true;
+    bool         		 isLocalRotation   = true;
+    bool         		 isWorldRotation   = false;
+    Point        		 axisOfRotation    = {0, 0, 0};
+    Point         		 axisOfTranslation = {0, 0, 0};
+
+	while (isRunning)
+	{
+		handleEvents(
+			event,
+			renderer3D, axisOfTranslation, axisOfRotation,
+			isLocalRotation, isWorldRotation, isRunning);
+
+		if (isWorldRotation)
+		{
+			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, 0.01);
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+
+		}
+		else if (isLocalRotation)
+		{
+			rotateShapesLocal(shapes, axisOfRotation, 0.01);
+		}
+		else
+		{
+			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
+		}
+
+		translateShapes(shapes, axisOfTranslation, 5);
+
+		renderer3D.draw();
+	}
+}
+
 void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
 {
 	axisOfRotation    = {0, 0, 0};
@@ -21,7 +64,7 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 	if (keys[SDL_SCANCODE_LCTRL])
 		isWorldRotation = true;
 	if (keys[SDL_SCANCODE_0])
-	{
+	{// TODO: reset shape position relative to world axes
 		std::vector<Shape3D> *shapes = renderer3D.getShapes();
 		*shapes = platonicSolids();
 		renderer3D.axesDefault();
@@ -128,45 +171,5 @@ void handleEvents(SDL_Event event, Renderer &renderer3D, Point &axisOfTranslatio
 				break;
 			// other events
 		}
-	}
-}
-
-int main(int argc, char *argv[])
-{
-	Renderer  			 renderer3D        = Renderer(1920, 1080);
-	std::vector<Shape3D> shapes            = platonicSolids();
-	renderer3D.setShapes(&shapes);
-	SDL_Event 			 event;
-	bool	  			 isRunning         = true;
-    bool         		 isLocalRotation   = true;
-    bool         		 isWorldRotation   = false;
-    Point        		 axisOfRotation    = {0, 0, 0};
-    Point         		 axisOfTranslation = {0, 0, 0};
-
-	while (isRunning)
-	{
-		handleEvents(
-			event,
-			renderer3D, axisOfTranslation, axisOfRotation,
-			isLocalRotation, isWorldRotation, isRunning);
-
-		if (isWorldRotation)
-		{
-			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, 0.01);
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-
-		}
-		else if (isLocalRotation)
-		{
-			rotateShapesLocal(shapes, axisOfRotation, 0.01);
-		}
-		else
-		{
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, 0.01);
-		}
-
-		translateShapes(shapes, axisOfTranslation, 5);
-
-		renderer3D.draw();
 	}
 }
