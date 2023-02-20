@@ -145,13 +145,10 @@ void rotateShapesAboutPoint(std::vector<Shape3D> &shapes, Point centerOfRotation
 
 void translatePoint(Point &point, Point axis, double distance)
 {
-    Point newAxis = axis;
+    Point newAxis = {0, 0, 0};
 	double norm   = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
     if (norm != 0)
-	{
-	    newAxis /= norm;
-		newAxis *= distance;
-	}
+		newAxis = axis * distance/norm;
 	else
 		return;
 	point += newAxis;
