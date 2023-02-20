@@ -20,24 +20,19 @@ int main(int argc, char *argv[])
 
 	while (isRunning)
 	{
-		handleEvents(
-			event,
+		handleEvents(event,
 			renderer3D, axisOfTranslation, axisOfRotation,
 			isLocalRotation, isWorldRotation, isRunning);
 
 		if (isWorldRotation)
 		{
 			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, rotationSpeed);
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, rotationSpeed);
+			rotateShapesAboutPoint(shapes, 					  {0, 0, 0}, axisOfRotation, rotationSpeed);
 		}
 		else if (isLocalRotation)
-		{
 			rotateShapesLocal(shapes, axisOfRotation, rotationSpeed);
-		}
 		else
-		{
 			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, rotationSpeed);
-		}
 
 		translateShapes(shapes, axisOfTranslation, movementSpeed);
 
@@ -49,14 +44,14 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 {
 	axisOfRotation    = {0, 0, 0};
 	axisOfTranslation = {0, 0, 0};
-	isRunning		= true;
-	isLocalRotation = true;
-	isWorldRotation = false;
+	isRunning		  = true;
+	isLocalRotation   = true;
+	isWorldRotation   = false;
 
-	Point xAxis   = renderer3D.xAxis();
-	Point yAxis   = renderer3D.yAxis();
-	Point zAxis   = renderer3D.zAxis();
-	Point sumAxis = {xAxis.x+yAxis.x+zAxis.x, xAxis.y+yAxis.y+zAxis.y, xAxis.z+yAxis.z+zAxis.z};
+	Point xAxis   	  = renderer3D.xAxis();
+	Point yAxis   	  = renderer3D.yAxis();
+	Point zAxis   	  = renderer3D.zAxis();
+	Point sumAxis 	  = xAxis + yAxis + zAxis;
 
 	if (keys[SDL_SCANCODE_ESCAPE])
 		isRunning 		= false;
@@ -73,84 +68,32 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 	}
 
 	if (keys[SDL_SCANCODE_S])
-	{
-		axisOfRotation.x += xAxis.x;
-		axisOfRotation.y += xAxis.y;
-		axisOfRotation.z += xAxis.z;
-	}
+		axisOfRotation += xAxis;
 	if (keys[SDL_SCANCODE_W])
-	{
-		axisOfRotation.x -= xAxis.x;
-		axisOfRotation.y -= xAxis.y;
-		axisOfRotation.z -= xAxis.z;
-	}
+		axisOfRotation -= xAxis;
 	if (keys[SDL_SCANCODE_D])
-	{
-		axisOfRotation.x += yAxis.x;
-		axisOfRotation.y += yAxis.y;
-		axisOfRotation.z += yAxis.z;
-	}
+		axisOfRotation += yAxis;
 	if (keys[SDL_SCANCODE_A])
-	{
-		axisOfRotation.x -= yAxis.x;
-		axisOfRotation.y -= yAxis.y;
-		axisOfRotation.z -= yAxis.z;
-	}
+		axisOfRotation -= yAxis;
 	if (keys[SDL_SCANCODE_Q])
-	{
-		axisOfRotation.x += zAxis.x;
-		axisOfRotation.y += zAxis.y;
-		axisOfRotation.z += zAxis.z;
-	}
+		axisOfRotation += zAxis;
 	if (keys[SDL_SCANCODE_E])
-	{
-		axisOfRotation.x -= zAxis.x;
-		axisOfRotation.y -= zAxis.y;
-		axisOfRotation.z -= zAxis.z;
-	}
+		axisOfRotation -= zAxis;
 	if (keys[SDL_SCANCODE_SPACE])
-	{
-		axisOfRotation.x += sumAxis.x;
-		axisOfRotation.y += sumAxis.y;
-		axisOfRotation.z += sumAxis.z;
-	}
-
+		axisOfRotation += sumAxis;
+	
 	if (keys[SDL_SCANCODE_RIGHT])
-	{
-		axisOfTranslation.x += xAxis.x;
-		axisOfTranslation.y += xAxis.y;
-		axisOfTranslation.z += xAxis.z;
-	}
+		axisOfTranslation += xAxis;
 	if (keys[SDL_SCANCODE_LEFT]) // WHY DOESNT THIS WORK?!?!!?@!?!?
-	{
-		axisOfTranslation.x -= xAxis.x;
-		axisOfTranslation.x -= xAxis.y;
-		axisOfTranslation.x -= xAxis.z;
-	}
+		axisOfTranslation -= xAxis;
 	if (keys[SDL_SCANCODE_DOWN])
-	{
-		axisOfTranslation.x += yAxis.x;
-		axisOfTranslation.y += yAxis.y;
-		axisOfTranslation.z += yAxis.z;
-	}
+		axisOfTranslation += yAxis;
 	if (keys[SDL_SCANCODE_UP])
-	{
-		axisOfTranslation.x -= yAxis.x;
-		axisOfTranslation.y -= yAxis.y;
-		axisOfTranslation.z -= yAxis.z;
-	}
-	if (keys[SDL_SCANCODE_PAGEUP])
-	{
-		axisOfTranslation.x += zAxis.x;
-		axisOfTranslation.y += zAxis.y;
-		axisOfTranslation.z += zAxis.z;
-	}
+		axisOfTranslation -= yAxis;
+	if (keys[SDL_SCANCODE_PAGEUP]) // Z Translation is ambiguous without perspective
+		axisOfTranslation += zAxis;
 	if (keys[SDL_SCANCODE_PAGEDOWN])
-	{
-		axisOfTranslation.x -= zAxis.x;
-		axisOfTranslation.y -= zAxis.y;
-		axisOfTranslation.z -= zAxis.z;
-	}
+		axisOfTranslation -= zAxis;
 }
 
 void handleEvents(SDL_Event event,  Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)

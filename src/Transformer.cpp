@@ -99,15 +99,15 @@ void rotatePoint(Point &point, Point axis, double angle)
     Quaternion original 	 = Quaternion(point);
     Quaternion product  	 = rotation.inverse() * original * rotation;
     Point 	   rotatedPoint  = {product.getX(), product.getY(), product.getZ()};
-    point = rotatedPoint;
+    point 					 = rotatedPoint;
 }
 
 void rotatePointAboutAnother(Point &point, Point centerOfRotation, Point axis, double angle)
 {
-	Point difference = {point.x - centerOfRotation.x, point.y - centerOfRotation.y, point.z - centerOfRotation.z};
+	Point difference   = point - centerOfRotation;
 	rotatePoint(difference, axis, angle);
-	Point sum = {difference.x + centerOfRotation.x, difference.y + centerOfRotation.y, difference.z + centerOfRotation.z};
-	point = sum;
+	Point rotatedPoint = difference + centerOfRotation;
+	point = rotatedPoint;
 }
 
 void rotateShapeLocal(Shape3D &shape, Point axis, double angle)
@@ -129,7 +129,7 @@ void rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, d
 
 void rotateShapesLocal(std::vector<Shape3D> &shapes, Point axis, double angle)
 {
-	for (auto& shape : shapes)
+	for (auto &shape : shapes)
 	{
 		rotateShapeLocal(shape, axis, angle);
 	}
@@ -137,7 +137,7 @@ void rotateShapesLocal(std::vector<Shape3D> &shapes, Point axis, double angle)
 
 void rotateShapesAboutPoint(std::vector<Shape3D> &shapes, Point centerOfRotation, Point axis, double angle)
 {
-	for (auto& shape : shapes)
+	for (auto &shape : shapes)
 	{
 		rotateShapeAboutPoint(shape, centerOfRotation, axis, angle);
 	}
@@ -145,11 +145,16 @@ void rotateShapesAboutPoint(std::vector<Shape3D> &shapes, Point centerOfRotation
 
 void translatePoint(Point &point, Point axis, double distance)
 {
-    Point newAxis = {0, 0, 0};
+    Point newAxis = axis;
 	double norm   = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
     if (norm != 0)
-	    newAxis = {distance*(axis.x/norm), distance*(axis.y/norm), distance*(axis.z/norm)};
-	point = {point.x + newAxis.x, point.y + newAxis.y, point.z + newAxis.z};
+	{
+	    newAxis /= norm;
+		newAxis *= distance;
+	}
+	else
+		return;
+	point += newAxis;
 }
 
 void tanslateShape(Shape3D &shape, Point axis, double distance)
