@@ -64,7 +64,7 @@ double Quaternion::getAngle()
 
 Point  Quaternion::getAxis()
 {
-    return {this->getX() / this->getAngle(), this->getY() / this->getAngle(), this->getZ() / this->getAngle() };
+    return {this->getX() / sin(this->getAngle()), this->getY() / sin(this->getAngle()), this->getZ() / sin(this->getAngle())};
 }
 
 void   Quaternion::setW(double w)

@@ -15,7 +15,6 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 
 void Renderer::axesDefault()
 {
-	std::vector<Shape3D> temp;
 	double length = 0;
 	if (ORIGIN.x > ORIGIN.y)
 	{
@@ -29,33 +28,31 @@ void Renderer::axesDefault()
 	std::vector<Point> yAxisVertices = {{0, -length, 0}, {0, 0, 0}, {0, length, 0}};
 	std::vector<Point> zAxisVertices = {{0, 0, -length}, {0, 0, 0}, {0, 0, length}};
 	std::vector<std::pair<int, int>> axisEdges = {{0, 1}, {1, 2}};
-	temp.push_back({xAxisVertices, axisEdges, {0, 0, 0}});
-	temp.push_back({yAxisVertices, axisEdges, {0, 0, 0}});
-	temp.push_back({zAxisVertices, axisEdges, {0, 0, 0}});
-	axes = temp;
+	axes = {
+		{xAxisVertices, axisEdges, {0, 0, 0}},
+		{yAxisVertices, axisEdges, {0, 0, 0}},
+		{zAxisVertices, axisEdges, {0, 0, 0}}};
 }
 
 Point Renderer::xAxis()
 {
+	// TODO: use norm in transformer
 	Point xAxis = axes.at(0).vertices.at(2);
-	double norm = sqrt(xAxis.x*xAxis.x + xAxis.y*xAxis.y + xAxis.z*xAxis.z);
-	xAxis /= norm;
+	xAxis /= norm(xAxis);
 	return xAxis;
 }
 
 Point Renderer::yAxis()
 {
 	Point yAxis = axes.at(1).vertices.at(2);
-	double norm = sqrt(yAxis.x*yAxis.x + yAxis.y*yAxis.y + yAxis.z*yAxis.z);
-	yAxis /= norm;
+	yAxis /= norm(yAxis);
 	return yAxis;
 }
 
 Point Renderer::zAxis()
 {
 	Point zAxis = axes.at(2).vertices.at(2);
-	double norm = sqrt(zAxis.x*zAxis.x + zAxis.y*zAxis.y + zAxis.z*zAxis.z);
-	zAxis /= norm;
+	zAxis /= norm(zAxis);
 	return zAxis;
 }
 
@@ -67,15 +64,6 @@ std::vector<Shape3D> *Renderer::getAxes()
 std::vector<Shape3D> *Renderer::getShapes()
 {
 	return this->shapes;
-}
-
-Quaternion Renderer::getWorldOrientation()
-{
-	Point  trueXAxis        = {1, 0, 0};
-	Point  worldXAxis       = xAxis();
-	Point  orientationAxis  = crossProduct(trueXAxis, worldXAxis); // both axes are normalized
-	double orientationAngle = atan(norm(orientationAxis)/dotProduct(trueXAxis, worldXAxis));
-	return Quaternion(orientationAxis, orientationAngle);
 }
 
 void Renderer::setShapes(std::vector<Shape3D> *shapes)

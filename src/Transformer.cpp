@@ -12,11 +12,7 @@ std::vector<Shape3D> platonicSolids()
         {2, 6}, {3, 7}, {4, 5}, {4, 6}, {5, 7}, {6, 7}};
 	Point cubePosition = {0, 0, 0};
 	for (auto& vertex : cubeVertices)
-	{
-		vertex.x += cubePosition.x;
-		vertex.y += cubePosition.y;
-		vertex.z += cubePosition.z;
-	}
+		vertex += cubePosition;
 
 	std::vector<Point> tetrahedronVertices = {
 		{scale, scale, scale}, {-scale, -scale, scale}, {-scale, scale, -scale}, {scale, -scale, -scale}};
@@ -24,11 +20,7 @@ std::vector<Shape3D> platonicSolids()
 		{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}};
 	Point tetrahedronPosition = {200, 0, 0};
 	for (auto& vertex : tetrahedronVertices)
-	{
-		vertex.x += tetrahedronPosition.x;
-		vertex.y += tetrahedronPosition.y;
-		vertex.z += tetrahedronPosition.z;
-	};
+		vertex += tetrahedronPosition;
 
 	scale *= 1.25; // make the octahedron similar size
 	std::vector<Point> octahedronVertices = {
@@ -39,11 +31,7 @@ std::vector<Shape3D> platonicSolids()
         {1, 4}, {1, 5}, {2, 4}, {2, 5}, {3, 4}, {3, 5}};
 	Point octahedronPosition = {-200, 0, 0};
 	for (auto& vertex : octahedronVertices)
-	{
-		vertex.x += octahedronPosition.x;
-		vertex.y += octahedronPosition.y;
-		vertex.z += octahedronPosition.z;
-	};
+		vertex += octahedronPosition;
 
 	scale *=.6; // make the dodecah and icosah .75 times scale
 	std::vector<Point> dodecahedronVertices = {
@@ -60,11 +48,7 @@ std::vector<Shape3D> platonicSolids()
         { 8, 10}, { 9, 11}, {12, 14}, {13, 15}, {16, 17}, {18, 19}};
 	Point dodecahedronPosition = {0, 200, 0};
 	for (auto& vertex : dodecahedronVertices)
-	{
-		vertex.x += dodecahedronPosition.x;
-		vertex.y += dodecahedronPosition.y;
-		vertex.z += dodecahedronPosition.z;
-	};
+		vertex += dodecahedronPosition;
 
 	std::vector<Point> icosahedronVertices = {
 		{0, scale, scale*PHI}, {0, scale, -scale*PHI}, {0, -scale, scale*PHI}, {0, -scale, -scale*PHI},
@@ -78,17 +62,15 @@ std::vector<Shape3D> platonicSolids()
         { 6, 10}, { 6, 11}, { 7, 10}, { 7, 11}, { 8,  9}, {10, 11}};
 	Point icosahedronPosition = {0, -200, 0};
 	for (auto& vertex : icosahedronVertices)
-	{
-		vertex.x += icosahedronPosition.x;
-		vertex.y += icosahedronPosition.y;
-		vertex.z += icosahedronPosition.z;
-	};
+		vertex += icosahedronPosition;
+
 	std::vector<Shape3D> platonicSolids = {
 		{cubeVertices,         cubeEdges,         cubePosition},
 		{tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition},
 		{octahedronVertices,   octahedronEdges,   octahedronPosition},
 		{dodecahedronVertices, dodecahedronEdges, dodecahedronPosition},
 		{icosahedronVertices,  icosahedronEdges,  icosahedronPosition}};
+
 	return platonicSolids;
 }
 
@@ -176,7 +158,7 @@ double dotProduct(Point u, Point v)
 
 Point crossProduct(Point u, Point v)
 {
-	return {u.y*v.z - v.y*u.z, v.x*u.z - u.x*v.z, u.x*v.y - v.x*u.y};
+	return {u.y*v.z - v.y*u.z, u.z*v.x - v.z*u.x, u.x*v.y - v.x*u.y};
 }
 
 double norm(Point point)
