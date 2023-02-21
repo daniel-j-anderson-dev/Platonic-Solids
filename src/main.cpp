@@ -59,11 +59,14 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 		isLocalRotation = false;
 	if (keys[SDL_SCANCODE_LCTRL])
 		isWorldRotation = true;
+	if (keys[SDL_SCANCODE_9])
+		renderer3D.axesDefault();
 	if (keys[SDL_SCANCODE_0])
 	{// TODO: reset shape position relative to world axes
 		std::vector<Shape3D> *shapes = renderer3D.getShapes();
 		*shapes = platonicSolids();
-		renderer3D.axesDefault();
+		//Quaternion worldOrientation = renderer3D.getWorldOrientation(); 
+		//rotateShapesLocal(*shapes, worldOrientation.getAxis(), worldOrientation.getAngle());
 		return;
 	}
 

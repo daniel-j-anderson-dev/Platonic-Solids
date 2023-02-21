@@ -3,6 +3,8 @@
 #pragma once
 #include "../include/SDL2/SDL.h"
 #include "../include/Shape3D.h"
+#include "../include/Quaternion.h"
+#include "../include/Transformer.h"
 #include <cmath>
 
 struct rgbaColor
@@ -25,6 +27,7 @@ public:
     Point zAxis();
     std::vector<Shape3D> *getAxes();
     std::vector<Shape3D> *getShapes();
+    Quaternion getWorldOrientation();
 
     // mutators
     void axesDefault();

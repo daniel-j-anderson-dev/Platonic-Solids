@@ -39,9 +39,7 @@ Point Renderer::xAxis()
 {
 	Point xAxis = axes.at(0).vertices.at(2);
 	double norm = sqrt(xAxis.x*xAxis.x + xAxis.y*xAxis.y + xAxis.z*xAxis.z);
-	xAxis.x /= norm;
-	xAxis.y /= norm;
-	xAxis.z /= norm;
+	xAxis /= norm;
 	return xAxis;
 }
 
@@ -49,9 +47,7 @@ Point Renderer::yAxis()
 {
 	Point yAxis = axes.at(1).vertices.at(2);
 	double norm = sqrt(yAxis.x*yAxis.x + yAxis.y*yAxis.y + yAxis.z*yAxis.z);
-	yAxis.x /= norm;
-	yAxis.y /= norm;
-	yAxis.z /= norm;
+	yAxis /= norm;
 	return yAxis;
 }
 
@@ -59,9 +55,7 @@ Point Renderer::zAxis()
 {
 	Point zAxis = axes.at(2).vertices.at(2);
 	double norm = sqrt(zAxis.x*zAxis.x + zAxis.y*zAxis.y + zAxis.z*zAxis.z);
-	zAxis.x /= norm;
-	zAxis.y /= norm;
-	zAxis.z /= norm;
+	zAxis /= norm;
 	return zAxis;
 }
 
@@ -73,6 +67,15 @@ std::vector<Shape3D> *Renderer::getAxes()
 std::vector<Shape3D> *Renderer::getShapes()
 {
 	return this->shapes;
+}
+
+Quaternion Renderer::getWorldOrientation()
+{
+	Point  trueXAxis        = {1, 0, 0};
+	Point  worldXAxis       = xAxis();
+	Point  orientationAxis  = crossProduct(trueXAxis, worldXAxis); // both axes are normalized
+	double orientationAngle = atan(norm(orientationAxis)/dotProduct(trueXAxis, worldXAxis));
+	return Quaternion(orientationAxis, orientationAngle);
 }
 
 void Renderer::setShapes(std::vector<Shape3D> *shapes)

@@ -19,7 +19,7 @@ Quaternion::Quaternion(double w, double x, double y, double z)
 
 Quaternion::Quaternion(Point axis, double angle)
 {
-    this->setW(1           * cos(angle / 2));
+    this->setW(1      * cos(angle / 2));
     this->setX(axis.x * sin(angle / 2));
     this->setY(axis.y * sin(angle / 2));
     this->setZ(axis.z * sin(angle / 2));
@@ -55,6 +55,16 @@ double Quaternion::getY()
 double Quaternion::getZ()
 {
     return this->z;
+}
+
+double Quaternion::getAngle()
+{
+    return acos(this->getW() * 2);
+}
+
+Point  Quaternion::getAxis()
+{
+    return {this->getX() / this->getAngle(), this->getY() / this->getAngle(), this->getZ() / this->getAngle() };
 }
 
 void   Quaternion::setW(double w)

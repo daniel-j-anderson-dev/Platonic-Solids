@@ -2,9 +2,8 @@
 
 std::vector<Shape3D> platonicSolids()
 {
-	std::vector<Shape3D> platonicSolids;
-	double scale = 50;
-    const double PHI   = 1.61803398874989484820;
+	double scale     = 50;
+    const double PHI = 1.61803398874989484820;
 	std::vector<Point> cubeVertices = {
 		{ scale, scale, scale}, { scale, scale, -scale}, { scale, -scale, scale}, { scale, -scale, -scale},
         {-scale, scale, scale}, {-scale, scale, -scale}, {-scale, -scale, scale}, {-scale, -scale, -scale}};
@@ -84,12 +83,12 @@ std::vector<Shape3D> platonicSolids()
 		vertex.y += icosahedronPosition.y;
 		vertex.z += icosahedronPosition.z;
 	};
-
-	platonicSolids.push_back({cubeVertices,         cubeEdges,         cubePosition});
-	platonicSolids.push_back({tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition});
-	platonicSolids.push_back({octahedronVertices,   octahedronEdges,   octahedronPosition});
-	platonicSolids.push_back({dodecahedronVertices, dodecahedronEdges, dodecahedronPosition});
-	platonicSolids.push_back({icosahedronVertices,  icosahedronEdges,  icosahedronPosition});
+	std::vector<Shape3D> platonicSolids = {
+		{cubeVertices,         cubeEdges,         cubePosition},
+		{tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition},
+		{octahedronVertices,   octahedronEdges,   octahedronPosition},
+		{dodecahedronVertices, dodecahedronEdges, dodecahedronPosition},
+		{icosahedronVertices,  icosahedronEdges,  icosahedronPosition}};
 	return platonicSolids;
 }
 
@@ -146,9 +145,8 @@ void rotateShapesAboutPoint(std::vector<Shape3D> &shapes, Point centerOfRotation
 void translatePoint(Point &point, Point axis, double distance)
 {
     Point newAxis = {0, 0, 0};
-	double norm   = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
-    if (norm != 0)
-		newAxis = axis * distance/norm;
+    if (norm(axis) != 0)
+		newAxis = axis * distance/norm(axis);
 	else
 		return;
 	point += newAxis;
@@ -169,4 +167,19 @@ void translateShapes(std::vector<Shape3D> &shapes, Point axis, double distance)
 	{
 		tanslateShape(shape, axis, distance);
 	}
+}
+
+double dotProduct(Point u, Point v)
+{
+	return {u.x*v.x + u.y*v.y + u.z*v.z};
+}
+
+Point crossProduct(Point u, Point v)
+{
+	return {u.y*v.z - v.y*u.z, v.x*u.z - u.x*v.z, u.x*v.y - v.x*u.y};
+}
+
+double norm(Point point)
+{
+	return sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
 }

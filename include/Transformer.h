@@ -19,4 +19,8 @@ void translatePoint(Point &point, Point axis, double distance);
 void tanslateShape(Shape3D &shape, Point axis, double distance);
 void translateShapes(std::vector<Shape3D> &shapes, Point axis, double distance);
 
+double dotProduct(Point u, Point v);
+Point crossProduct(Point u, Point v);
+double norm(Point point);
+
 #endif

@@ -18,6 +18,8 @@ public:
     double getX();
     double getY();
     double getZ();
+    double getAngle();
+    Point  getAxis();
     
     void   setW(double w);
     void   setX(double x);
