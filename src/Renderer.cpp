@@ -119,7 +119,8 @@ void Renderer::drawShapes(std::vector<Shape3D>shapes)
 
 void Renderer::clearScreen()
 {
-	SDL_RenderCopy(renderer2D, background, NULL, NULL);
+	SDL_SetRenderDrawColor(renderer2D, 0, 0, 0, 255);
+	SDL_RenderClear(renderer2D);
 	drawAxes();
 }
 
