@@ -1,4 +1,4 @@
 # Platonic-solids
-This project is a simple 3D renderer written in C++ and using the SDL2 libraries.
-This project is being used to learn SDL2 to create a simple game engine.
+This project is a simple 3D renderer written in C++ and using the SDL3 librarie.
+This project is being used to learn SDL3 to create a simple game engine.
 
