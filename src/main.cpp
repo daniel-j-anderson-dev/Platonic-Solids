@@ -6,8 +6,6 @@ int main(int argc, char *argv[])
 {
 	Renderer  			 renderer3D        = Renderer(800, 800);
 	SDL_Event 			 event;
-	std::vector<Shape3D> shapes            = platonicSolids();
-	renderer3D.setShapes(&shapes);
 
 	bool	  			 isRunning         = true;
     bool         		 isLocalRotation   = true;
@@ -26,15 +24,25 @@ int main(int argc, char *argv[])
 
 		if (isWorldRotation)
 		{
-			rotateShapesAboutPoint(*(renderer3D.getAxes()),   {0, 0, 0}, axisOfRotation, rotationSpeed);
-			rotateShapesAboutPoint(shapes, 					  {0, 0, 0}, axisOfRotation, rotationSpeed);
+			rotateShapesAboutPoint(
+				renderer3D.getAxes(),
+				{0, 0, 0},
+				axisOfRotation,
+				rotationSpeed
+			);
+			rotateShapesAboutPoint(
+				renderer3D.getShapes(),
+				{0, 0, 0},
+				axisOfRotation,
+				rotationSpeed
+			);
 		}
 		else if (isLocalRotation)
-			rotateShapesLocal(shapes, axisOfRotation, rotationSpeed);
+			rotateShapesLocal(renderer3D.getShapes(), axisOfRotation, rotationSpeed);
 		else
-			rotateShapesAboutPoint(shapes, {0, 0, 0}, axisOfRotation, rotationSpeed);
+			rotateShapesAboutPoint(renderer3D.getShapes(), {0, 0, 0}, axisOfRotation, rotationSpeed);
 
-		translateShapes(shapes, axisOfTranslation, movementSpeed);
+		translateShapes(renderer3D.getShapes(), axisOfTranslation, movementSpeed);
 
 		renderer3D.draw();
 	}

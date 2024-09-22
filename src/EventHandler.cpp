@@ -1,4 +1,9 @@
 #include "../include/EventHandler.h"
+#include "Shape3D.h"
+#include "Transformer.h"
+#include <SDL_events.h>
+#include <SDL_oldnames.h>
+#include <span>
 
 void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
 {
@@ -22,14 +27,12 @@ void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslati
 	if (keys[SDL_SCANCODE_9])
 	{
 		renderer3D.axesDefault();
-		std::vector<Shape3D> *shapes = renderer3D.getShapes(); 
-		*shapes = platonicSolids();
+		renderer3D.setShapes(platonicSolids());
 		return;
 	}
 	if (keys[SDL_SCANCODE_0])
 	{// TODO: reset shape position relative to world axes
-		std::vector<Shape3D> *shapes = renderer3D.getShapes(); 
-		*shapes = platonicSolids();
+		renderer3D.setShapes(platonicSolids());
 		return;
 	}
 
@@ -68,17 +71,24 @@ void handleEvents(SDL_Event event,  Renderer &renderer3D, Point &axisOfTranslati
 	{
 		switch (event.type)
 		{
-			case SDL_KEYDOWN:
-				handleInput(SDL_GetKeyboardState(NULL),
+			case SDL_EVENT_KEY_DOWN: {
+				handleInput(SDL_GetKeyboardState(nullptr),
 				renderer3D, axisOfTranslation, axisOfRotation,
 				isLocalRotation, isWorldRotation, isRunning);
 				break;
+			}
 
-			case SDL_KEYUP:
-				handleInput(SDL_GetKeyboardState(NULL),
+			case SDL_EVENT_KEY_UP: {
+				handleInput(SDL_GetKeyboardState(nullptr),
 				renderer3D, axisOfTranslation, axisOfRotation,
 				isLocalRotation, isWorldRotation, isRunning);
 				break;
+			}
+
+			case SDL_EVENT_QUIT: {
+				isRunning = false;
+				break;
+			}
 			// other events
 		}
 	}

@@ -1,16 +1,39 @@
 #include "../include/Renderer.h"
+#include "Transformer.h"
+#include <SDL3/SDL.h>
+#include <array>
+#include <iostream>
 
 Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {    
-    SDL_Init(SDL_INIT_VIDEO);
-    window            = SDL_CreateWindow("Platonic Solids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    renderer2D        = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	background 		  = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("background.bmp"));
-	ORIGIN            = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
+    if (SDL_Init(SDL_INIT_VIDEO)) {
+        std::cerr << "failed to initialize SDL: " << SDL_GetError() << std::endl;
+		std::exit(-1);
+	}
+
+    window  = SDL_CreateWindow("Platonic Solids", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN);
+	if (window == nullptr) {
+        std::cerr << "failed to create window: " << SDL_GetError() << std::endl;
+		std::exit(-1);
+	}
+
+    renderer2D = SDL_CreateRenderer(window, nullptr, SDL_RENDERER_ACCELERATED);
+	if (renderer2D == nullptr) {
+        std::cerr << "failed to create renderer2D: " << SDL_GetError() << std::endl;
+		std::exit(-1);
+	}
+
+	background = SDL_CreateTextureFromSurface(renderer2D, SDL_LoadBMP("../background.bmp"));
+	if (background == nullptr) {
+        std::cerr << "failed to create background: " << SDL_GetError() << std::endl;
+		std::exit(-1);
+	}
+
+	ORIGIN = {(double)WINDOW_WIDTH/2, (double)WINDOW_HEIGHT/2, 0};
 	axesDefault();
 	startTime = SDL_GetPerformanceCounter();
-	endTime   = 0;
-	shapes = NULL;
+	endTime = 0;
+	shapes = platonicSolids();
 }
 
 void Renderer::axesDefault()
@@ -24,14 +47,16 @@ void Renderer::axesDefault()
 	{
 		length = ORIGIN.y * 2;
 	}
-	std::vector<Point> xAxisVertices = {{-length, 0, 0}, {0, 0, 0}, {length, 0, 0}};
-	std::vector<Point> yAxisVertices = {{0, -length, 0}, {0, 0, 0}, {0, length, 0}};
-	std::vector<Point> zAxisVertices = {{0, 0, -length}, {0, 0, 0}, {0, 0, length}};
+	std::vector<Point> xAxisVertices = {Point{-length, 0, 0}, Point{0, 0, 0}, Point{length, 0, 0}};
+	std::vector<Point> yAxisVertices = {Point{0, -length, 0}, Point{0, 0, 0}, Point{0, length, 0}};
+	std::vector<Point> zAxisVertices = {Point{0, 0, -length}, Point{0, 0, 0}, Point{0, 0, length}};
 	std::vector<std::pair<int, int>> axisEdges = {{0, 1}, {1, 2}};
+	
 	axes = {
-		{xAxisVertices, axisEdges, {0, 0, 0}},
-		{yAxisVertices, axisEdges, {0, 0, 0}},
-		{zAxisVertices, axisEdges, {0, 0, 0}}};
+		Shape3D{xAxisVertices, axisEdges, {0, 0, 0}},
+		Shape3D{yAxisVertices, axisEdges, {0, 0, 0}},
+		Shape3D{zAxisVertices, axisEdges, {0, 0, 0}}
+	};
 }
 
 Point Renderer::xAxis()
@@ -56,17 +81,17 @@ Point Renderer::zAxis()
 	return zAxis;
 }
 
-std::vector<Shape3D> *Renderer::getAxes()
+std::span<Shape3D, 3> Renderer::getAxes()
 {
-	return &(this->axes);
+	return std::span(this->axes);
 }
 
-std::vector<Shape3D> *Renderer::getShapes()
+std::span<Shape3D, 5> Renderer::getShapes()
 {
 	return this->shapes;
 }
 
-void Renderer::setShapes(std::vector<Shape3D> *shapes)
+void Renderer::setShapes(const std::array<Shape3D, 5> shapes)
 {
 	this->shapes = shapes;
 }
@@ -97,10 +122,10 @@ void Renderer::drawLine(rgbaColor color, Point startPoint, Point endPoint)
 	startPoint = {startPoint.x + ORIGIN.x, startPoint.y + ORIGIN.y, startPoint.z + ORIGIN.z};
 	endPoint   = {endPoint.x   + ORIGIN.x, endPoint.y   + ORIGIN.y, endPoint.z   + ORIGIN.z};
 	SDL_SetRenderDrawColor(renderer2D, color.red, color.blue, color.green, color.alpha);
-	SDL_RenderDrawLine(renderer2D, startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+	SDL_RenderLine(renderer2D, startPoint.x, startPoint.y, endPoint.x, endPoint.y);
 }
 
-void Renderer::drawShape(Shape3D shape)
+void Renderer::drawShape(const Shape3D& shape)
 {
 	rgbaColor white = {255, 255, 255, 255};
 	for (auto &edge : shape.edges)
@@ -109,9 +134,9 @@ void Renderer::drawShape(Shape3D shape)
 	}
 }
 
-void Renderer::drawShapes(std::vector<Shape3D>shapes)
+void Renderer::drawShapes()
 {
-	for (auto &shape : shapes)
+	for (auto& shape : this->shapes)
 	{
 		drawShape(shape);
 	}
@@ -137,7 +162,7 @@ void Renderer::draw()
 {
 	this->clearScreen();
 
-	this->drawShapes(*(this->shapes));
+	this->drawShapes();
 	
 	this->update();
 }

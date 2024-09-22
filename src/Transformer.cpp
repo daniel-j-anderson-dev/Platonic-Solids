@@ -1,6 +1,7 @@
 #include "../include/Transformer.h"
+#include "Shape3D.h"
 
-std::vector<Shape3D> platonicSolids()
+std::array<Shape3D, 5> platonicSolids()
 {
 	double scale     = 50;
     const double PHI = 1.61803398874989484820;
@@ -13,6 +14,7 @@ std::vector<Shape3D> platonicSolids()
 	Point cubePosition = {0, 0, 0};
 	for (auto& vertex : cubeVertices)
 		vertex += cubePosition;
+	Shape3D cube = {cubeVertices,         cubeEdges,         cubePosition};
 
 	std::vector<Point> tetrahedronVertices = {
 		{scale, scale, scale}, {-scale, -scale, scale}, {-scale, scale, -scale}, {scale, -scale, -scale}};
@@ -21,6 +23,7 @@ std::vector<Shape3D> platonicSolids()
 	Point tetrahedronPosition = {200, 0, 0};
 	for (auto& vertex : tetrahedronVertices)
 		vertex += tetrahedronPosition;
+	Shape3D tetrahedron = {tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition};
 
 	scale *= 1.25; // make the octahedron similar size
 	std::vector<Point> octahedronVertices = {
@@ -32,6 +35,7 @@ std::vector<Shape3D> platonicSolids()
 	Point octahedronPosition = {-200, 0, 0};
 	for (auto& vertex : octahedronVertices)
 		vertex += octahedronPosition;
+	Shape3D octahedron = {octahedronVertices,   octahedronEdges,   octahedronPosition};
 
 	scale *=.6; // make the dodecah and icosah .75 times scale
 	std::vector<Point> dodecahedronVertices = {
@@ -49,6 +53,7 @@ std::vector<Shape3D> platonicSolids()
 	Point dodecahedronPosition = {0, 200, 0};
 	for (auto& vertex : dodecahedronVertices)
 		vertex += dodecahedronPosition;
+	Shape3D dodecahedron = {dodecahedronVertices, dodecahedronEdges, dodecahedronPosition};
 
 	std::vector<Point> icosahedronVertices = {
 		{0, scale, scale*PHI}, {0, scale, -scale*PHI}, {0, -scale, scale*PHI}, {0, -scale, -scale*PHI},
@@ -63,15 +68,15 @@ std::vector<Shape3D> platonicSolids()
 	Point icosahedronPosition = {0, -200, 0};
 	for (auto& vertex : icosahedronVertices)
 		vertex += icosahedronPosition;
+	Shape3D icosahedron = {icosahedronVertices,  icosahedronEdges,  icosahedronPosition};
 
-	std::vector<Shape3D> platonicSolids = {
-		{cubeVertices,         cubeEdges,         cubePosition},
-		{tetrahedronVertices,  tetrahedronEdges,  tetrahedronPosition},
-		{octahedronVertices,   octahedronEdges,   octahedronPosition},
-		{dodecahedronVertices, dodecahedronEdges, dodecahedronPosition},
-		{icosahedronVertices,  icosahedronEdges,  icosahedronPosition}};
-
-	return platonicSolids;
+	return  {
+		cube,
+		tetrahedron,
+		octahedron,
+		dodecahedron,
+		icosahedron,
+	};
 }
 
 void rotatePoint(Point &point, Point axis, double angle)
@@ -108,7 +113,7 @@ void rotateShapeAboutPoint(Shape3D &shape, Point centerOfRotation, Point axis, d
 	rotatePointAboutAnother(shape.position, centerOfRotation, axis, angle);
 }
 
-void rotateShapesLocal(std::vector<Shape3D> &shapes, Point axis, double angle)
+void rotateShapesLocal(std::span<Shape3D> shapes, Point axis, double angle)
 {
 	for (auto &shape : shapes)
 	{
@@ -116,7 +121,7 @@ void rotateShapesLocal(std::vector<Shape3D> &shapes, Point axis, double angle)
 	}
 }
 
-void rotateShapesAboutPoint(std::vector<Shape3D> &shapes, Point centerOfRotation, Point axis, double angle)
+void rotateShapesAboutPoint(std::span<Shape3D> shapes, Point centerOfRotation, Point axis, double angle)
 {
 	for (auto &shape : shapes)
 	{
@@ -143,7 +148,7 @@ void tanslateShape(Shape3D &shape, Point axis, double distance)
 	translatePoint(shape.position, axis, distance);
 }
 
-void translateShapes(std::vector<Shape3D> &shapes, Point axis, double distance)
+void translateShapes(std::span<Shape3D> shapes, Point axis, double distance)
 {
 	for (auto &shape : shapes)
 	{
@@ -153,7 +158,7 @@ void translateShapes(std::vector<Shape3D> &shapes, Point axis, double distance)
 
 double dotProduct(Point u, Point v)
 {
-	return {u.x*v.x + u.y*v.y + u.z*v.z};
+	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
 Point crossProduct(Point u, Point v)
