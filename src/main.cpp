@@ -1,6 +1,6 @@
-#include "../include/Renderer.h"
-#include "../include/Transformer.h"
-#include "../include/EventHandler.h"
+#include "../include/Renderer.hpp"
+#include "../include/Transformer.hpp"
+#include "../include/EventHandler.hpp"
 
 int main(int argc, char *argv[])
 {

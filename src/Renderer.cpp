@@ -1,5 +1,5 @@
-#include "../include/Renderer.h"
-#include "Transformer.h"
+#include "../include/Renderer.hpp"
+#include "Transformer.hpp"
 #include <SDL3/SDL.h>
 #include <array>
 #include <iostream>
@@ -153,7 +153,7 @@ void Renderer::update()
 {
 	SDL_RenderPresent(renderer2D);
 	endTime = SDL_GetPerformanceCounter();
-	double elapsedTime = (endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
+	double elapsedTime = static_cast<double>(endTime - startTime) / (SDL_GetPerformanceFrequency() * 1000);
 	SDL_Delay(floor((16.6666666666666666) - elapsedTime));
 	startTime = SDL_GetPerformanceCounter();
 }

@@ -2,7 +2,7 @@
 #define QUATERNION_H
 #pragma once
 
-#include "../include/Point.h"
+#include "../include/Point.hpp"
 
 class Quaternion
 {

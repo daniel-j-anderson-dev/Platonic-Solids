@@ -1,7 +1,7 @@
 #ifndef SHAPE3D_H
 #define SHAPE3D_H
 #pragma once
-#include "../include/Point.h"
+#include "../include/Point.hpp"
 #include <vector>
 struct Shape3D
 {

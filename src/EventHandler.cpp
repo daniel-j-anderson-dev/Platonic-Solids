@@ -1,9 +1,6 @@
-#include "../include/EventHandler.h"
-#include "Shape3D.h"
-#include "Transformer.h"
+#include "../include/EventHandler.hpp"
+#include "Transformer.hpp"
 #include <SDL_events.h>
-#include <SDL_oldnames.h>
-#include <span>
 
 void handleInput(const bool* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
 {

@@ -4,8 +4,7 @@
 #include <span>
 #pragma once
 #include <SDL3/SDL.h>
-#include "../include/Shape3D.h"
-#include "../include/Transformer.h"
+#include "../include/Shape3D.hpp"
 
 struct rgbaColor
 {

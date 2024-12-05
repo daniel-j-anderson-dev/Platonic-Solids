@@ -3,10 +3,10 @@
 #include <array>
 #include <span>
 #pragma once
-#include "../include/Point.h"
-#include "../include/Shape3D.h"
-#include "../include/Quaternion.h"
-#include "../include/Renderer.h"
+#include "../include/Point.hpp"
+#include "../include/Shape3D.hpp"
+#include "../include/Quaternion.hpp"
+#include "../include/Renderer.hpp"
 #include <cmath>
 
 std::array<Shape3D, 5> platonicSolids();
