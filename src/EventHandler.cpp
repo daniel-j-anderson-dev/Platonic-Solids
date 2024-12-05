@@ -5,7 +5,7 @@
 #include <SDL_oldnames.h>
 #include <span>
 
-void handleInput(const Uint8* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
+void handleInput(const bool* keys, Renderer &renderer3D, Point &axisOfTranslation, Point &axisOfRotation, bool &isLocalRotation, bool &isWorldRotation, bool &isRunning)
 {
 	axisOfRotation    = {0, 0, 0};
 	axisOfTranslation = {0, 0, 0};

@@ -11,13 +11,13 @@ Renderer::Renderer(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 		std::exit(-1);
 	}
 
-    window  = SDL_CreateWindow("Platonic Solids", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN);
+    window  = SDL_CreateWindow("Platonic Solids", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
 	if (window == nullptr) {
         std::cerr << "failed to create window: " << SDL_GetError() << std::endl;
 		std::exit(-1);
 	}
 
-    renderer2D = SDL_CreateRenderer(window, nullptr, SDL_RENDERER_ACCELERATED);
+    renderer2D = SDL_CreateRenderer(window, "software");
 	if (renderer2D == nullptr) {
         std::cerr << "failed to create renderer2D: " << SDL_GetError() << std::endl;
 		std::exit(-1);
