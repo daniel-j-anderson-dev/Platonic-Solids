@@ -1,5 +1,5 @@
-#ifndef SHAPE3D_H
-#define SHAPE3D_H
+#ifndef SHAPE3D_HPP
+#define SHAPE3D_HPP
 #pragma once
 #include "../include/Point.hpp"
 #include <vector>

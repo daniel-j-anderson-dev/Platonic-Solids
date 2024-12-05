@@ -1,5 +1,5 @@
-#ifndef EVENTHANDLER_H
-#define EVENTHANDLER_H
+#ifndef EVENTHANDLER_HPP
+#define EVENTHANDLER_HPP
 #pragma once
 #include "../include/Renderer.hpp"
 

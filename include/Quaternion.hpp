@@ -1,5 +1,5 @@
-#ifndef QUATERNION_H
-#define QUATERNION_H
+#ifndef QUATERNION_HPP
+#define QUATERNION_HPP
 #pragma once
 
 #include "../include/Point.hpp"

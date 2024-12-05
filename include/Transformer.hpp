@@ -1,5 +1,5 @@
-#ifndef TRANSFORMER_H
-#define TRANSFORMER_H
+#ifndef TRANSFORMER_HPP
+#define TRANSFORMER_HPP
 #include <array>
 #include <span>
 #pragma once

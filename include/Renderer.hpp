@@ -1,5 +1,5 @@
-#ifndef Renderer_H
-#define Renderer_H
+#ifndef Renderer_HPP
+#define Renderer_HPP
 #include <array>
 #include <span>
 #pragma once
