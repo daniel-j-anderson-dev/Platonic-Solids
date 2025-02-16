@@ -4,7 +4,7 @@
 
 #include "vector2.hpp"
 
-class Vector3 {
+struct Vector3 {
  public:
   double x;
   double y;
